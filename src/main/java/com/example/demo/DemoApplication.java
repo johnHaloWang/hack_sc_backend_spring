@@ -11,6 +11,7 @@ import com.example.demo.data.provider.FS_StoreManager;
 import com.example.demo.data.provider.StoreManager;
 
 
+
 //@SpringBootApplication
 @Configuration
 @EnableAutoConfiguration
@@ -29,6 +30,12 @@ public class DemoApplication {
         StoreManager storeManager = new FS_StoreManager();
         return storeManager;
     }
+//    @Bean
+//    public StoreRepository storeRepository() {
+//    	StoreRepository storeRepository = new StoreRepository();
+//        return storeRepository;
+//    }
+//    
 	
 	
 	public static void main(String[] args) {

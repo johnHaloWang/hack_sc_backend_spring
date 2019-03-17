@@ -25,10 +25,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.demo.DemoApplication;
+
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
 import com.example.demo.data.provider.StoreManager;
+
+import org.bson.types.ObjectId;
+
+
+
+
 
 /**
  * This is the controller used by Spring framework.
@@ -49,17 +55,22 @@ public class WebController {
      * In our project, all the beans are defined in
      * the {@link DemoApplication} class.
      */
-    @Autowired
-    private StoreManager storeManager;
+//    @Autowired
+////    private StoreRepository storeRepository;
+//    @Autowired
+//    private StoreManager storeManager;
+
     
-	@RequestMapping(value = "/john/ping", method = RequestMethod.GET)
+    
+	@RequestMapping(value = "/server/ping", method = RequestMethod.GET)
     String healthCheck() {
         // You can replace this with other string,
         // and run the application locally to check your changes
-        // with the URL: http://localhost:5000/
+        // with the URL: http://localhost:5000/  if run local server
+		// with the URL: http://[aws url]:5000/  if run on aws elastic beanstalk
         return "OK";
     }
-	@RequestMapping(value = "/john/hello", method = RequestMethod.GET)
+	@RequestMapping(value = "/server/hello", method = RequestMethod.GET)
     String getGreeting()
     {
        return "Hello, world!";
@@ -75,11 +86,13 @@ public class WebController {
      * Try it in your web browser:
      *     http://localhost:5000/john/store/store101
      */
-    @RequestMapping(value = "/john/store/{storeId}", method = RequestMethod.GET)
-    Store getStore(@PathVariable("storeId") String storeId) {
-        Store store = storeManager.getStore(storeId);
-        return store;
-    }
+//    @RequestMapping(value = "/json/store/{storeId}", method = RequestMethod.GET)
+//    Store getStore(@PathVariable("storeId") String id) {
+//    	//json file database method
+//        Store store = storeManager.getStore(id);
+//
+//        return store;
+//    }
     
     
     /**
@@ -102,24 +115,30 @@ public class WebController {
      * @param longitude
      * @return
      */
-    @RequestMapping(value = "/john/store/{storeId}", method = RequestMethod.POST)
-    Store updateStore(
-            @PathVariable("storeId") String id,
-            @RequestParam("name") String name,
-            @RequestParam("pictureFileName") String pictureFileName,
-            @RequestParam("latitude") float latitude,
-            @RequestParam("longitude") float longitude){
-        Store store = new Store();
-        store.setId(id);
-        store.setName(name);
-        store.setPictureFileName(pictureFileName);
-        Geolocation loc = new Geolocation();
-        loc.setLatitude(latitude);
-        loc.setLongitude(longitude);
-        store.setLocation(loc);
-        storeManager.updateStore(store);
-        return store;
-    }
+//    @RequestMapping(value = "/json/store/{storeId}", method = RequestMethod.POST)
+//    Store updateStore(
+//            @PathVariable("storeId") String id,
+//            @RequestParam("name") String name,
+//            @RequestParam("pictureFileName") String pictureFileName,
+//            @RequestParam("latitude") float latitude,
+//            @RequestParam("longitude") float longitude){
+//        Store store = new Store();
+//        //ObjectId = require('mongodb').ObjectID;
+//        
+//        store.setString_id(id);;
+//        //store.set_id(ObjectId.get());
+//        store.setName(name);
+//        store.setPictureFileName(pictureFileName);
+//        Geolocation loc = new Geolocation();
+//        loc.setLatitude(latitude);
+//        loc.setLongitude(longitude);
+//        store.setLocation(loc);
+//        
+//        //json file database method
+//        storeManager.updateStore(store);
+//
+//        return store;
+//    }
     
     
     /**
@@ -127,22 +146,25 @@ public class WebController {
      *
      * @param storeId
      */
-    @RequestMapping(value = "/john/store/{storeId}", method = RequestMethod.DELETE)
-    void deleteStore(
-            @PathVariable("storeId") String storeId) {
-        storeManager.deleteStore(storeId);
-    }
-    
+//    @RequestMapping(value = "/json/store/{storeId}", method = RequestMethod.DELETE)
+//    void deleteStore(
+//            @PathVariable("storeId") String id) {
+//    	
+//    	//json file database method
+//        storeManager.deleteStore(id);
+//    }
     
     /**
      * This API lists all the stores in the current database.
      *
      * @return
      */
-    @RequestMapping(value = "/john/stores/list", method = RequestMethod.GET)
-    List<Store> listAllStores() {
-        return storeManager.listAllStores();
-    }
+//    @RequestMapping(value = "/json/store/list", method = RequestMethod.GET)
+//    List<Store> listAllStores() {
+//    	//json file database method
+//        return storeManager.listAllStores();
+//    }
+    
     
     
     

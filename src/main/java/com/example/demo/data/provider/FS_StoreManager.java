@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//import org.bson.types.ObjectId;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.example.demo.data.Store;
@@ -93,7 +95,7 @@ public class FS_StoreManager implements StoreManager {
 	public void updateStore(Store store) {
 		// TODO Auto-generated method stub
 		StoreMap storeMap = getStoreMap();
-		storeMap.put(store.getId(), store);
+		storeMap.put(store.getString_id(), store);
 		persistStoreMap(storeMap);
 
 	}

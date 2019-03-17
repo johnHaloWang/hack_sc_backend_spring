@@ -1,14 +1,34 @@
 package com.example.demo.data;
 
+
 import java.util.Date;
+import org.bson.types.ObjectId;
+
 
 /**
  * The basic Store object.
  * @author johnhalowang (chi-wei wang)
  */
+
 public class Store {
 	/** The unique store Id */
-    private String id;   
+    private  ObjectId _id;  
+    /** The demon string store Id */
+    private String string_id;
+	/**
+	 * @return the string_id
+	 */
+	public String getString_id() {
+		return string_id;
+	}
+
+	/**
+	 * @param string_id the string_id to set
+	 */
+	public void setString_id(String string_id) {
+		this.string_id = string_id;
+	}
+
 	/** The store name */
     private String name;
     
@@ -18,7 +38,7 @@ public class Store {
     private String pictureFileName;
     /** The store gelocation */
     private Geolocation location;
-    
+   
     
     /**
 	 * @return the location
@@ -49,17 +69,17 @@ public class Store {
 	}
 
 	/**
-	 * @return the id
+	 * @return the _id
 	 */
-	public String getId() {
-		return id;
+	public String get_id() {
+		return _id.toHexString();
 	}
 	
 	/**
-	 * @param id the id to set
+	 * @param _id the _id to set
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void set_id(ObjectId _id) {
+		this._id = _id;
 	}
 	
 	/**
@@ -89,5 +109,5 @@ public class Store {
 	public void setCreationTime(String creationTime) {
 		this.creationTime = creationTime;
 	}
-
+	
 }
