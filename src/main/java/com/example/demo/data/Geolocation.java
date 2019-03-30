@@ -11,33 +11,33 @@ package com.example.demo.data;
 public class Geolocation {
 	
 	/** The geolocation */
-    private float latitude;
-	private float longitude;
+    private double latitude;
+	private double longitude;
 	
 	
 	
 	/**
 	 * @return the latitude
 	 */
-	public float getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 	/**
 	 * @param latitude the latitude to set
 	 */
-	public void setLatitude(float latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 	/**
 	 * @return the longitude
 	 */
-	public float getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 	/**
 	 * @param longitude the longitude to set
 	 */
-	public void setLongitude(float longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 

@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.example.demo.data.provider.FS_StoreManager;
 import com.example.demo.data.provider.StoreManager;
+import com.example.demo.data.provider.FS_ProductManager;
+import com.example.demo.data.provider.ProductManager;
 
 
 
@@ -30,12 +32,12 @@ public class DemoApplication {
         StoreManager storeManager = new FS_StoreManager();
         return storeManager;
     }
-//    @Bean
-//    public StoreRepository storeRepository() {
-//    	StoreRepository storeRepository = new StoreRepository();
-//        return storeRepository;
-//    }
-//    
+    @Bean
+    public ProductManager productManger() {
+    	ProductManager productManager= new FS_ProductManager();
+        return productManager;
+    }
+    
 	
 	
 	public static void main(String[] args) {
