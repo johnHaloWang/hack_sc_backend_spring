@@ -57,11 +57,21 @@ public class FS_ProductManager implements ProductManager{
 	}
 	
 	private double calcGPSDistance(Geolocation geo1, Geolocation geo2) {
-		double latitudeSquared = Math.pow(geo1.getLatitude() 
-				- geo2.getLatitude(), 2);
-		double longitudeSquared = Math.pow(geo1.getLongitude() 
-				- geo2.getLongitude(), 2);
-		return Math.sqrt(latitudeSquared + longitudeSquared);
+		final int EARTH_RADIUS = 6371; // Radius of the earth
+		final double METERS_IN_ONE_MILE = 1609.34;
+		double latitude1 = geo1.getLatitude();
+		double latitude2 = geo2.getLatitude();
+		double longitude1 = geo1.getLongitude();
+		double longitude2 = geo2.getLongitude();
+	    double latDistance = Math.toRadians(latitude2 - latitude1);
+	    double longDistance = Math.toRadians(longitude2 - longitude1);
+	    //calculates distance using radians
+	    double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+	            + Math.cos(Math.toRadians(latitude1)) * Math.cos(Math.toRadians(latitude2))
+	            * Math.sin(longDistance / 2) * Math.sin(longDistance / 2);
+	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+	    return EARTH_RADIUS * c * 1000 / METERS_IN_ONE_MILE;
 	}
 
 }
