@@ -32,10 +32,10 @@ import static com.mongodb.client.model.Filters.eq;
 public class FS_ProductManager implements ProductManager{
 	
 	// Connect to database
-	String uri = "mongodb://steve:AsecretPassword@13.57.202.190:27017/mycustom_db";
-	MongoClientURI clientUri = new MongoClientURI(uri);
-	MongoClient mongoClient = new MongoClient(clientUri);
-	MongoDatabase mongoDatabase = mongoClient.getDatabase("mycustom_db");
+	// String uri = "mongodb://steve:AsecretPassword@13.57.202.190:27017/mycustom_db";
+	// MongoClientURI clientUri = new MongoClientURI(uri);
+	// MongoClient mongoClient = new MongoClient(clientUri);
+	// MongoDatabase mongoDatabase = mongoClient.getDatabase("mycustom_db");
 	
 	@Autowired
 	private StoreInventoryRepository storeInventoryRepository;
