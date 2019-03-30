@@ -58,6 +58,7 @@ public class FS_ProductManager implements ProductManager{
 	
 	private double calcGPSDistance(Geolocation geo1, Geolocation geo2) {
 		final int EARTH_RADIUS = 6371; // Radius of the earth
+		final int MILLIMETERS_IN_METER = 1000;
 		final double METERS_IN_ONE_MILE = 1609.34;
 		double latitude1 = geo1.getLatitude();
 		double latitude2 = geo2.getLatitude();
@@ -71,7 +72,7 @@ public class FS_ProductManager implements ProductManager{
 	            * Math.sin(longDistance / 2) * Math.sin(longDistance / 2);
 	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-	    return EARTH_RADIUS * c * 1000 / METERS_IN_ONE_MILE;
+	    return EARTH_RADIUS * c * MILLIMETERS_IN_METER / METERS_IN_ONE_MILE; //convert mm to mile
 	}
 
 }
