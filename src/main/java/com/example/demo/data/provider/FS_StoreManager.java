@@ -4,17 +4,16 @@
  */
 package com.example.demo.data.provider;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-//import org.bson.types.ObjectId;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import org.bson.types.ObjectId;
+import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
-import com.example.demo.data.StoreMap;
-import com.example.demo.util.ResourceResolver;
+import com.example.demo.data.repository.StoreRepository;
 
 
 /**
@@ -30,96 +29,67 @@ import com.example.demo.util.ResourceResolver;
 
 public class FS_StoreManager implements StoreManager {
 
-	/* (non-Javadoc)
-	 * @see com.example.demo.data.provider.StoreManager#getStore(java.lang.String)
-	 */
-	
-	/**
-	 * We persist all the stores related objects as JSON.
-	 * <p>
-	 * For more information about JSON and ObjectMapper, please see:
-	 * http://www.journaldev.com/2324/jackson-json-processing-api-in-java-example-tutorial
-	 *
-	 * or Google tons of tutorials
-	 *
-	 */
-	private static final ObjectMapper JSON = new ObjectMapper();
-	
-	/**
-	 * Load the store map from the local file.
-	 *
-	 * @return
-	 */
-	private StoreMap getStoreMap() {
-		StoreMap storeMap = null;
-		File storeFile = ResourceResolver.getStoreFile();
-		if (storeFile.exists()) {
-			// read the file and convert the JSON content
-			// to the UserMap object
-			try {
-				storeMap = JSON.readValue(storeFile, StoreMap.class);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			storeMap = new StoreMap();
-		}
-		return storeMap;
-	}
-	
-	/**
-	 * Save and persist the user map in the local file.
-	 *
-	 * @param userMap
-	 */
-	private void persistStoreMap(StoreMap storeMap) {
-		try {
-			// convert the Store object to JSON format
-			JSON.writeValue(ResourceResolver.getStoreFile(), storeMap);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+		
+	@Autowired
+	private StoreRepository storeRepository;
 	
 	@Override
-	public Store getStore(String storeId) {
-		// TODO Auto-generated method stub
-		StoreMap storeMap = getStoreMap();
-		return storeMap.get(storeId);
+	public Store getStore(ObjectId storeId) {
+		return this.storeRepository.findBy_id(storeId);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.example.demo.data.provider.StoreManager#updateStore(com.example.demo.data.Store)
-	 */
 	@Override
-	public void updateStore(Store store) {
-		// TODO Auto-generated method stub
-		StoreMap storeMap = getStoreMap();
-		storeMap.put(store.getString_id(), store);
-		persistStoreMap(storeMap);
+	public void updateStore(Store store) {	
+		storeRepository.save(store);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.example.demo.data.provider.StoreManager#deleteStore(java.lang.String)
-	 */
 	@Override
-	public void deleteStore(String storeId) {
-		// TODO Auto-generated method stub
-		StoreMap storeMap = getStoreMap();
-		storeMap.remove(storeId);
-		persistStoreMap(storeMap);
-
+	public void deleteStore(ObjectId storeId) {
+		storeRepository.delete(storeRepository.findBy_id(storeId));
 	}
 
-	/* (non-Javadoc)
-	 * @see com.example.demo.data.provider.StoreManager#listAllStores()
-	 */
 	@Override
 	public List<Store> listAllStores() {
-		// TODO Auto-generated method stub
-		StoreMap storeMap = getStoreMap();
-		return new ArrayList<Store>(storeMap.values());
+		return storeRepository.findAll();
+	}
+	
+	@Override
+	public void addStore(Store store) {
+		storeRepository.insert(store);
+	}
+	@Override
+	public Collection<Store>getStoreByName(String name) {
+		return storeRepository.findByNameLike(name);
+	}
+	
+	@Override
+	public List<Store>getStoreRadius(String storeName, Geolocation geo, double miles){
+		List<Store> list = new ArrayList<Store>();
+		Collection<Store> collection = getStoreByName(storeName);
+		for (Store store: collection) {
+			if(miles>calcGPSDistance(store.getGeolocation(), geo))
+				list.add(store);
+		}
+		return list;
+	}
+	private double calcGPSDistance(Geolocation geo1, Geolocation geo2) {
+		final int EARTH_RADIUS = 6371; // Radius of the earth
+		final int MILLIMETERS_IN_METER = 1000;
+		final double METERS_IN_ONE_MILE = 1609.34;
+		double latitude1 = geo1.getLatitude();
+		double latitude2 = geo2.getLatitude();
+		double longitude1 = geo1.getLongitude();
+		double longitude2 = geo2.getLongitude();
+	    double latDistance = Math.toRadians(latitude2 - latitude1);
+	    double longDistance = Math.toRadians(longitude2 - longitude1);
+	    //calculates distance using radians
+	    double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+	            + Math.cos(Math.toRadians(latitude1)) * Math.cos(Math.toRadians(latitude2))
+	            * Math.sin(longDistance / 2) * Math.sin(longDistance / 2);
+	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+	    return EARTH_RADIUS * c * MILLIMETERS_IN_METER / METERS_IN_ONE_MILE; //convert mm to mile
 	}
 
 }

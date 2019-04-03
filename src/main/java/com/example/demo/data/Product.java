@@ -17,9 +17,47 @@ public class Product {
     private String stocked_date;
     private String pictureFileName;
     private Geolocation geolocation;
+    /** The timestamp when the store is being created */
+    private String creationTime = new Date(System.currentTimeMillis()).toString();
     
     
-    /**
+    public Product() {
+    	
+    }
+    
+    public Product(ObjectId _id, String store_id, double price, String name, String brand, boolean available,
+			String stocked_date, String pictureFileName, Geolocation geolocation) {
+    	
+		super();
+		this._id = _id;
+		this.store_id = store_id;
+		this.price = price;
+		this.name = name;
+		this.brand = brand;
+		this.available = available;
+		this.stocked_date = stocked_date;
+		this.pictureFileName = pictureFileName;
+		this.geolocation = geolocation;
+	}
+
+
+	/**
+	 * @return the creationTime
+	 */
+	public String getCreationTime() {
+		return creationTime;
+	}
+
+
+	/**
+	 * @param creationTime the creationTime to set
+	 */
+	public void setCreationTime(String creationTime) {
+		this.creationTime = creationTime;
+	}
+
+
+	/**
 	 * @return the store_id
 	 */
 	public String getStore_id() {

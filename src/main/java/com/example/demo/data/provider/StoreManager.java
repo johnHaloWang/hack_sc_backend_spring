@@ -4,7 +4,11 @@
 package com.example.demo.data.provider;
 
 import org.bson.types.ObjectId;
+
+import java.util.Collection;
 import java.util.List;
+
+import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
 
 /**
@@ -23,7 +27,7 @@ public interface StoreManager {
 	 * @param storeId
 	 * @return the Store object
 	 */
-	public Store getStore(String StoreId);
+	public Store getStore(ObjectId StoreId);
 
 	/**
 	 * Update the given user object and persist it.
@@ -42,7 +46,7 @@ public interface StoreManager {
 	 *
 	 * @param storeId
 	 */
-	public void deleteStore(String storeId);
+	public void deleteStore(ObjectId storeId);
 
 	/**
 	 * List all the current stores in the storage.
@@ -50,4 +54,8 @@ public interface StoreManager {
 	 * @return
 	 */
 	public List<Store> listAllStores();
+	public void addStore(Store store);
+	public Collection<Store>getStoreByName(String name);
+	public List<Store>getStoreRadius(String storeName, Geolocation geo, double miles);
+	
 }

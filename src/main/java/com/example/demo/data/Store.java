@@ -11,49 +11,113 @@ import org.bson.types.ObjectId;
  */
 
 public class Store {
-	/** The unique store Id */
-    private  ObjectId _id;  
-    /** The demon string store Id */
-    private String string_id;
-	/**
-	 * @return the string_id
-	 */
-	public String getString_id() {
-		return string_id;
-	}
-
-	/**
-	 * @param string_id the string_id to set
-	 */
-	public void setString_id(String string_id) {
-		this.string_id = string_id;
-	}
-
-	/** The store name */
-    private String name;
-    
-    /** The timestamp when the user is being created */
+	
+	private  ObjectId _id;  
+	private String name;
     private String creationTime = new Date(System.currentTimeMillis()).toString();
-    /** The file name for the picture */
     private String pictureFileName;
-    /** The store gelocation */
-    private Geolocation location;
-   
+    private Geolocation geolocation;
+	private String address;
+    private String zipcode;
+    private String city;
+    private String state;
+    
+    
+    public Store() {
+    	
+    }
+    
+	public Store(ObjectId _id, String name, String pictureFileName, Geolocation geolocation, String address,
+			String zipcode, String city, String state) {
+		super();
+		this._id = _id;
+		this.name = name;
+		this.pictureFileName = pictureFileName;
+		this.geolocation = geolocation;
+		this.address = address;
+		this.zipcode = zipcode;
+		this.city = city;
+		this.state = state;
+	}
+
+	/**
+	 * @return the geolocation
+	 */
+	public Geolocation getGeolocation() {
+		return geolocation;
+	}
+
+	/**
+	 * @param geolocation the geolocation to set
+	 */
+	public void setGeolocation(Geolocation geolocation) {
+		this.geolocation = geolocation;
+	}
+
+
+      
+    /**
+	 * @return the state
+	 */
+	public String getState() {
+		return state;
+	}
+
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getStoreAddress() {
+    	String buildAddress =  address + ' ' + city + ' ' + zipcode + ", "+ state; 
+    	return buildAddress;
+    }
+    
     
     /**
-	 * @return the location
+	 * @return the address
 	 */
-	public Geolocation getLocation() {
-		return location;
+	public String getAddress() {
+		return address;
 	}
 
 	/**
-	 * @param location the location to set
+	 * @param address the address to set
 	 */
-	public void setLocation(Geolocation location) {
-		this.location = location;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
+	/**
+	 * @return the zipcode
+	 */
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	/**
+	 * @param zipcode the zipcode to set
+	 */
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+	/**
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
+	 * @param city the city to set
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
 	/**
 	 * @return the pictureFileName
 	 */
@@ -109,5 +173,6 @@ public class Store {
 	public void setCreationTime(String creationTime) {
 		this.creationTime = creationTime;
 	}
+	
 	
 }

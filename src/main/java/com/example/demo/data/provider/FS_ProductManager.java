@@ -4,45 +4,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Product;
 import com.example.demo.data.repository.StoreInventoryRepository;
-
-//MongoDB
-import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
 
 
-import static com.mongodb.client.model.Filters.eq;
 
+/**
+ * @author johnhalowang, Lisa Cheng, Gina 
+ *
+ */
 
 public class FS_ProductManager implements ProductManager{
-	
-	// Connect to database
-	// String uri = "mongodb://steve:AsecretPassword@13.57.202.190:27017/mycustom_db";
-	// MongoClientURI clientUri = new MongoClientURI(uri);
-	// MongoClient mongoClient = new MongoClient(clientUri);
-	// MongoDatabase mongoDatabase = mongoClient.getDatabase("mycustom_db");
 	
 	@Autowired
 	private StoreInventoryRepository storeInventoryRepository;
 
 	@Override
 	public List<Product> getProductRadius(String productName, Geolocation geo, double miles) {
-		List<Product> list = new ArrayList();
+		List<Product> list = new ArrayList<Product>();
 		Collection<Product> collection = getProductByName(productName);
 		for (Product product: collection) {
 			if(miles>calcGPSDistance(product.getGeolocation(), geo))
@@ -74,5 +56,28 @@ public class FS_ProductManager implements ProductManager{
 
 	    return EARTH_RADIUS * c * MILLIMETERS_IN_METER / METERS_IN_ONE_MILE; //convert mm to mile
 	}
-
+	
+	@Override
+	public void updateProduct(Product product) {
+		storeInventoryRepository.save(product);
+	}
+	
+	@Override
+	public void deleteProduct(ObjectId id) {
+		storeInventoryRepository.delete(storeInventoryRepository.findBy_id(id));
+	}
+	
+	@Override
+	public List<Product> listAllProducts() {
+		return storeInventoryRepository.findAll();
+	}
+	@Override
+	public void addProduct(Product product) {
+		storeInventoryRepository.insert(product);
+	}
+	
+	@Override
+	public Product findProductById(ObjectId id) {
+		return storeInventoryRepository.findBy_id(id);
+	}
 }

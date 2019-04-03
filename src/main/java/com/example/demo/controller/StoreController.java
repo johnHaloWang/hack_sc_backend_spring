@@ -3,17 +3,8 @@
  */
 package com.example.demo.controller;
 
-//import java.io.FileWriter;
-//import java.io.IOException;
-//import java.io.Writer;
-//import java.util.ArrayList;
-//import java.util.Date;
-//import java.util.HashMap;
-import java.util.List;
-//import java.util.Map;
-//import java.util.Set;
-//import java.net.InetAddress;
 
+import java.util.List;
 
 import com.example.demo.DemoApplication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
-//import com.example.demo.DemoApplication;
 import com.example.demo.data.Geolocation;
+import com.example.demo.data.Product;
 import com.example.demo.data.Store;
-//import com.example.demo.data.provider.StoreManager;
+import com.example.demo.data.provider.StoreManager;
 
-import com.example.demo.data.repository.StoreRepository;
 import org.bson.types.ObjectId;
 
 
 /**
- * @author johnwang
+ * @author johnhalowang
  *
  */
 
@@ -61,24 +50,20 @@ public class StoreController {
     * the {@link DemoApplication} class.
     */
    @Autowired
-   private StoreRepository storeRepository;
+   private StoreManager storeManager;
    /**
     * This is a simple example of how to use a data manager
     * to retrieve the data and return it as an HTTP response.
     * <p>
-    * Note, when it returns from the Spring, it will be
-    * automatically converted to JSON format.
+
     * <p>
     * Try it in your web browser:
     *     http://localhost:5000/john/store/store101
     */
    @RequestMapping(value = "/{storeId}", method = RequestMethod.GET)
    Store getStore(@PathVariable("storeId") ObjectId id) {
-   	//json file database method
-       //Store store = storeManager.getStore(storeId);
-   	
-   	//using MongoRepository to handle it
-       Store store = storeRepository.findBy_id(id);
+
+       Store store = storeManager.getStore(id);
        return store;
    }
    
@@ -98,28 +83,32 @@ public class StoreController {
     * @param id
     * @param name
     * @param pictureFileName
+    * @param address
+    * @param zipcode
+    * @param city
+    * @param state
     * @param latitude
     * @param longitude
-    * @return
+    * @return store
     */
    @RequestMapping(value = "/{storeId}", method = RequestMethod.POST)
    Store updateStore(
            @PathVariable("storeId") ObjectId id,
            @RequestParam("name") String name,
            @RequestParam("pictureFileName") String pictureFileName,
+           @RequestParam("address") String address,
+           @RequestParam("zipcode") String zipcode,
+           @RequestParam("city") String city,
+           @RequestParam("state") String state,
            @RequestParam("latitude") float latitude,
            @RequestParam("longitude") float longitude){
-       Store store = new Store();
-       store.set_id(id);
-       store.setName(name);
-       store.setPictureFileName(pictureFileName);
-       Geolocation loc = new Geolocation();
-       loc.setLatitude(latitude);
-       loc.setLongitude(longitude);
-       store.setLocation(loc);
-       
-       //using MongoRepository to handle it
-       this.storeRepository.save(store);
+	   
+       Geolocation geolocation = new Geolocation();
+       geolocation.setLatitude(latitude);
+       geolocation.setLongitude(longitude);
+       Store store = new Store(id, name, pictureFileName, geolocation, address,
+				zipcode, city, state);
+       storeManager.updateStore(store);
        return store;
    }
    
@@ -133,11 +122,7 @@ public class StoreController {
    void deleteStore(
            @PathVariable("storeId") ObjectId id) {
    	
-   	//json file database method
-       //storeManager.deleteStore(storeId);
-   	
-   	//using MongoRepository to handle it
-   	storeRepository.delete(storeRepository.findBy_id(id));
+	   storeManager.deleteStore(id);
    }
    
    
@@ -149,15 +134,18 @@ public class StoreController {
    @RequestMapping(value = "/list", method = RequestMethod.GET)
    List<Store> listAllStores() {
    	
-   	
-   	//using MongoRepository to handle it
-   	return storeRepository.findAll();
-
+   		return storeManager.listAllStores();
    }
+   
+
    /**
     * This API add a store in the current database.
     * @param name
     * @param pictureFileName
+    * @param address
+    * @param zipcode
+    * @param city
+    * @param state
     * @param latitude
     * @param longitude
     * @return store
@@ -166,20 +154,43 @@ public class StoreController {
    Store addStore(
            @RequestParam("name") String name,
            @RequestParam("pictureFileName") String pictureFileName,
+           @RequestParam("address") String address,
+           @RequestParam("zipcode") String zipcode,
+           @RequestParam("city") String city,
+           @RequestParam("state") String state,
            @RequestParam("latitude") float latitude,
            @RequestParam("longitude") float longitude){
-       Store store = new Store();
-       store.set_id(ObjectId.get());
-       store.setName(name);
-       store.setPictureFileName(pictureFileName);
-       Geolocation loc = new Geolocation();
-       loc.setLatitude(latitude);
-       loc.setLongitude(longitude);
-       store.setLocation(loc);
-       
-       //using MongoRepository to handle it
-       this.storeRepository.insert(store);
+	   
+       Geolocation geolocation = new Geolocation();
+       geolocation.setLatitude(latitude);
+       geolocation.setLongitude(longitude);
 
+       Store store = new Store(ObjectId.get(), name, pictureFileName, geolocation, address,
+				zipcode, city, state);
+       storeManager.addStore(store);
        return store;
    }
+   
+   /**
+    * This API list a list of that closed to a store (store name)
+    * based on the geolocation and radius in the current database.
+    * @param name
+    * @param latitude
+    * @param longitude
+    * @param radius
+    * @return
+    */
+   
+   @RequestMapping(value = "/listGeo/{name}", method = RequestMethod.GET)
+	List<Store> listNameByRadius(
+			@RequestParam("name") String name,
+			@RequestParam("latitude") float latitude,
+			@RequestParam("longitude") float longitude,
+			@RequestParam("radius") float radius){
+		
+		Geolocation geo = new Geolocation();
+		geo.setLatitude(latitude);
+		geo.setLongitude(longitude);
+		return storeManager.getStoreRadius(name, geo, radius);
+	}
 }
