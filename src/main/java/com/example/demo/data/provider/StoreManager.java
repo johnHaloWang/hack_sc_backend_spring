@@ -46,7 +46,7 @@ public interface StoreManager {
 	 *
 	 * @param storeId
 	 */
-	public void deleteStore(ObjectId storeId);
+	public boolean deleteStore(ObjectId storeId);
 
 	/**
 	 * List all the current stores in the storage.

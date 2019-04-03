@@ -20,7 +20,7 @@ public interface ProductManager {
 	public List<Product>getProductRadius(String productName, Geolocation geo, double miles);
 	public Collection<Product> getProductByName(String name);
 	public void updateProduct(Product product);
-	public void deleteProduct(ObjectId id);
+	public boolean deleteProduct(ObjectId id);
 	public List<Product> listAllProducts();
 	public void addProduct(Product product);
 	public Product findProductById(ObjectId id);

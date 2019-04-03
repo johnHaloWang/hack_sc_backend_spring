@@ -45,8 +45,14 @@ public class FS_StoreManager implements StoreManager {
 	}
 
 	@Override
-	public void deleteStore(ObjectId storeId) {
-		storeRepository.delete(storeRepository.findBy_id(storeId));
+	public boolean deleteStore(ObjectId storeId) {
+		Store find = storeRepository.findBy_id(storeId);
+		if(find == null)
+			return false;
+		else {
+			storeRepository.delete(find);
+			return true;
+		}
 	}
 
 	@Override
@@ -73,6 +79,7 @@ public class FS_StoreManager implements StoreManager {
 		}
 		return list;
 	}
+	
 	private double calcGPSDistance(Geolocation geo1, Geolocation geo2) {
 		final int EARTH_RADIUS = 6371; // Radius of the earth
 		final int MILLIMETERS_IN_METER = 1000;

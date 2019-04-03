@@ -11,7 +11,8 @@ import com.example.demo.data.provider.FS_StoreManager;
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.data.provider.FS_ProductManager;
 import com.example.demo.data.provider.ProductManager;
-
+import com.example.demo.data.provider.FS_UserManager;
+import com.example.demo.data.provider.UserManager;
 
 
 //@SpringBootApplication
@@ -36,6 +37,11 @@ public class DemoApplication {
     public ProductManager productManger() {
     	ProductManager productManager= new FS_ProductManager();
         return productManager;
+    }
+    @Bean
+    public UserManager userManger() {
+    	UserManager userManager= new FS_UserManager();
+        return userManager;
     }
     
 	

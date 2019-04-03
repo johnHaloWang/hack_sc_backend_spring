@@ -63,8 +63,15 @@ public class FS_ProductManager implements ProductManager{
 	}
 	
 	@Override
-	public void deleteProduct(ObjectId id) {
-		storeInventoryRepository.delete(storeInventoryRepository.findBy_id(id));
+	public boolean deleteProduct(ObjectId id) {
+		Product find = storeInventoryRepository.findBy_id(id);
+		if(find == null)
+			return false;
+		else {
+			storeInventoryRepository.delete(find);
+			return true;
+		}
+			
 	}
 	
 	@Override
