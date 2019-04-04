@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,12 +73,13 @@ public class ProductController {
 			@RequestParam("name") String name,
 			@RequestParam("latitude") float latitude,
 			@RequestParam("longitude") float longitude,
-			@RequestParam("radius") float radius){
+			@RequestParam("radius") float radius,
+			@RequestParam("mpg") float mpg) throws IOException{
 		
 		Geolocation geo = new Geolocation();
 		geo.setLatitude(latitude);
 		geo.setLongitude(longitude);
-		return productManager.getProductRadius(name, geo, radius);
+		return productManager.getProductsInRadius(name, geo, radius, mpg);
 	}
 	
 	  @RequestMapping(value = "/add/{name}", method = RequestMethod.PUT)

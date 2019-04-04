@@ -6,11 +6,17 @@ import org.bson.types.ObjectId;
 import com.example.demo.data.Geolocation;
 
 
+/**
+ * @author johnhalowang, Lisa Chen
+ *
+ */
 public class Product {
 	/** The unique store Id */
     private  ObjectId _id;  
 	private String store_id;
     private double price;
+    private double gasCost;
+    private double totalPrice;
     private String name;
     private String brand;
     private boolean available;
@@ -38,6 +44,8 @@ public class Product {
 		this.stocked_date = stocked_date;
 		this.pictureFileName = pictureFileName;
 		this.geolocation = geolocation;
+		gasCost = 0;
+		calcTotalPrice();
 	}
 
 
@@ -84,6 +92,7 @@ public class Product {
 	 */
 	public void setPrice(double price) {
 		this.price = price;
+		calcTotalPrice();
 	}
 
 	/**
@@ -184,4 +193,34 @@ public class Product {
 	public void set_id(ObjectId _id) {
 		this._id = _id;
 	}
+	
+	/**
+	 * Gets the gas cost
+	 * @return
+	 */
+	public double getGasCost() { 
+		return gasCost;
+	}
+	
+	/**
+	 * Sets the cost of the gas used to reach the item.
+	 * @param gasCost
+	 */
+	public void setGasCost(double gasCost) {
+		this.gasCost = gasCost;
+		calcTotalPrice();
+	}
+	
+	/**
+	 * Gets the total cost: price of the item + cost of gas to reach item
+	 */
+	public double getTotalCost() {
+		return totalPrice;
+	}
+	
+	private void calcTotalPrice() {
+		totalPrice = price + gasCost;
+	}
+	
+	
 }

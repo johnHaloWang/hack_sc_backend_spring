@@ -1,9 +1,11 @@
 package com.example.demo.data.provider;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.example.demo.data.AverageGasPriceCalculator;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Product;
 import com.example.demo.data.repository.StoreInventoryRepository;
@@ -13,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * @author johnhalowang, Lisa Cheng, Gina 
+ * @author johnhalowang, Lisa Chen, Gina 
  *
  */
 
@@ -23,12 +25,21 @@ public class FS_ProductManager implements ProductManager{
 	private StoreInventoryRepository storeInventoryRepository;
 
 	@Override
-	public List<Product> getProductRadius(String productName, Geolocation geo, double miles) {
+	public List<Product> getProductsInRadius(String productName, Geolocation geo, 
+			double miles, double mpg) throws IOException {
 		List<Product> list = new ArrayList<Product>();
 		Collection<Product> collection = getProductByName(productName);
+		double pricePerGallon = new AverageGasPriceCalculator(geo).getAveragePrice();
+		double pricePerMiles = pricePerGallon / mpg;
 		for (Product product: collection) {
-			if(miles>calcGPSDistance(product.getGeolocation(), geo))
+			double productDistance = calcGPSDistance(product.getGeolocation(), geo);
+			if(miles> productDistance)
+			{
+				double gasCost = pricePerMiles * productDistance;
+				gasCost = 0.01 * Math.round(gasCost * 100);
+				product.setGasCost(gasCost);
 				list.add(product);
+			}
 		}
 		return list;
 	}
