@@ -1,7 +1,5 @@
 package com.example.demo.data.provider.impl;
 
-import io.jsonwebtoken.lang.Collections;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,13 +12,8 @@ import com.example.demo.data.Product;
 import com.example.demo.data.provider.ProductManager;
 import com.example.demo.data.repository.StoreInventoryRepository;
 
-
-
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 
 /**
  * @author johnhalowang, Lisa Chen, Gina 

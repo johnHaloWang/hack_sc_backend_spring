@@ -13,7 +13,6 @@ import org.bson.types.ObjectId;
 
 import com.example.demo.controller.DuplicateItemException;
 import com.example.demo.data.Geolocation;
-import com.example.demo.data.Product;
 import com.example.demo.data.Store;
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.data.repository.StoreRepository;
@@ -55,7 +54,6 @@ public class FS_StoreManager implements StoreManager {
 			throw new DuplicateItemException();
 		
 		storeRepository.save(store);
-
 	}
 
 	@Override
