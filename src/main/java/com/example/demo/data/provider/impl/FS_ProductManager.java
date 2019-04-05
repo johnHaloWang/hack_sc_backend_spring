@@ -80,7 +80,7 @@ public class FS_ProductManager implements ProductManager{
 	public void updateProduct(Product product) throws ProductDuplicateItemException{
 		product.setName(convertToTitleCase(product.getName()));
 		if (!doesProductAlreadyExist(product))
-			throw new ProductDuplicateItemException("Product already exisit in the database");
+			throw new ProductDuplicateItemException("Product already exists at this store.");
 		storeInventoryRepository.save(product);
 	}
 	
@@ -103,7 +103,7 @@ public class FS_ProductManager implements ProductManager{
 		product.setName(convertToTitleCase(product.getName()));
 		
 		if (!doesProductAlreadyExist(product))
-			throw new ProductDuplicateItemException("Product already exisit in the database");
+			throw new ProductDuplicateItemException("Product already exists at this store.");
 		
 		storeInventoryRepository.insert(product);
 	}
@@ -123,7 +123,7 @@ public class FS_ProductManager implements ProductManager{
 			if (match.getStore_id().equals(storeID)) {
 				if (match.get_id() == null)
 					return true;
-				else if (match.get_id() != null && !match.get_id().equals(productID))
+				else if (!match.get_id().equals(productID))
 					return true;
 			}
 		}

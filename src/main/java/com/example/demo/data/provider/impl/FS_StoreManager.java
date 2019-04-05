@@ -51,8 +51,7 @@ public class FS_StoreManager implements StoreManager {
 		store.setName(convertToTitleCase(store.getName()));
 
 		if (doesStoreAlreadyExist(store))
-			throw new StoreDuplicateItemException("This store address already exisit, please enter another one");
-		
+			throw new StoreDuplicateItemException("This store address already exists, please enter another one.");
 		storeRepository.save(store);
 	}
 
@@ -81,8 +80,7 @@ public class FS_StoreManager implements StoreManager {
 		store.setName(convertToTitleCase(store.getName()));
 		
 		if (doesStoreAlreadyExist(store))
-			throw new StoreDuplicateItemException("This store address already exisit, please enter another one");
-		
+			throw new StoreDuplicateItemException("This store address already exists, please enter another one.");
 		storeRepository.insert(store);
 	}
 	
@@ -102,7 +100,6 @@ public class FS_StoreManager implements StoreManager {
 					match.getZipcode().equals(storeZipCode)) {
 				if (match.get_id() == null)
 					return true;
-				else if (match.get_id() != null && !match.get_id().equals(storeID))
 					return true;
 			}
 		}
