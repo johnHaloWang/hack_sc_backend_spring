@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.example.demo.controller.DuplicateItemException;
+import com.example.demo.exceptions.ProductDuplicateItemException;
 import com.example.demo.data.AverageGasPriceCalculator;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Product;
@@ -77,10 +77,10 @@ public class FS_ProductManager implements ProductManager{
 	 * @param product Product to try to add
 	 * @throws DuplicateItemException If the product is a duplicate
 	 */
-	public void updateProduct(Product product) {
+	public void updateProduct(Product product) throws ProductDuplicateItemException{
 		product.setName(convertToTitleCase(product.getName()));
 		if (!doesProductAlreadyExist(product))
-			throw new DuplicateItemException();
+			throw new ProductDuplicateItemException("Product already exisit in the database");
 		storeInventoryRepository.save(product);
 	}
 	
@@ -99,11 +99,11 @@ public class FS_ProductManager implements ProductManager{
 	 * @param product Product to try to add
 	 * @throws DuplicateItemException If the product is a duplicate
 	 */
-	public void addProduct(Product product) {
+	public void addProduct(Product product) throws ProductDuplicateItemException {
 		product.setName(convertToTitleCase(product.getName()));
 		
 		if (!doesProductAlreadyExist(product))
-			throw new DuplicateItemException();
+			throw new ProductDuplicateItemException("Product already exisit in the database");
 		
 		storeInventoryRepository.insert(product);
 	}

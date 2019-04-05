@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
+import com.example.demo.exceptions.StoreDuplicateItemException;
 
 /**
  * @author johnhalowang
@@ -39,7 +40,7 @@ public interface StoreManager {
 	 *
 	 * @param store object
 	 */
-	public void updateStore(Store store);
+	public void updateStore(Store store) throws StoreDuplicateItemException ;
 
 	/**
 	 * Delete the given store from the storage.
@@ -54,7 +55,7 @@ public interface StoreManager {
 	 * @return
 	 */
 	public List<Store> listAllStores();
-	public void addStore(Store store);
+	public void addStore(Store store) throws StoreDuplicateItemException;
 	public Collection<Store>getStoreByName(String name);
 	public List<Store>getStoreRadius(String storeName, Geolocation geo, double miles);
 	

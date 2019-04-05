@@ -18,7 +18,7 @@ import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
 import com.example.demo.data.User;
 import com.example.demo.data.provider.UserManager;
-
+import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.exceptions.UserDoesntExistedException;
 import com.example.demo.exceptions.UserExistedException;
 import com.example.demo.exceptions.UserPasswordMismatchedException;
@@ -85,7 +85,7 @@ public class UserController {
 			@RequestParam("address") String address, @RequestParam("zipcode") String zipcode,
 			@RequestParam("city") String city, @RequestParam("state") String state, @RequestParam("email") String email,
 			@RequestParam("latitude") float latitude, @RequestParam("longitude") float longitude)
-			throws ServletException, UserExistedException, UserDoesntExistedException, UserPasswordMismatchedException {
+			throws ServletException, UserExistedException, UserDoesntExistedException, UserPasswordMismatchedException, StoreDuplicateItemException {
 
 		Geolocation geolocation = new Geolocation();
 		geolocation.setLatitude(latitude);
@@ -106,7 +106,7 @@ public class UserController {
 			@RequestParam("address") String address, @RequestParam("zipcode") String zipcode,
 			@RequestParam("city") String city, @RequestParam("state") String state, @RequestParam("email") String email,
 			@RequestParam("latitude") float latitude, @RequestParam("longitude") float longitude)
-			throws UserExistedException {
+			throws UserExistedException, StoreDuplicateItemException {
 
 		Geolocation geolocation = new Geolocation();
 		geolocation.setLatitude(latitude);

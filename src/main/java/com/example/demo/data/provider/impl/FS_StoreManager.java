@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.bson.types.ObjectId;
 
-import com.example.demo.controller.DuplicateItemException;
+import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
 import com.example.demo.data.provider.StoreManager;
@@ -47,11 +47,11 @@ public class FS_StoreManager implements StoreManager {
 	 * @param store Store to add
 	 * @throws DuplicateItemException If the product is a duplicate
 	 */
-	public void updateStore(Store store) {	
+	public void updateStore(Store store) throws StoreDuplicateItemException{	
 		store.setName(convertToTitleCase(store.getName()));
 
 		if (doesStoreAlreadyExist(store))
-			throw new DuplicateItemException();
+			throw new StoreDuplicateItemException("This store address already exisit, please enter another one");
 		
 		storeRepository.save(store);
 	}
@@ -72,7 +72,7 @@ public class FS_StoreManager implements StoreManager {
 	 * @param store Store to add
 	 * @throws DuplicateItemException If the product is a duplicate
 	 */
-	public void addStore(Store store) {
+	public void addStore(Store store) throws StoreDuplicateItemException {
 		/*
 		 * TODO need to add verification for address input (probably through 
 		 * the geolocation check). Also ensure formatting is standardized for 
@@ -81,7 +81,7 @@ public class FS_StoreManager implements StoreManager {
 		store.setName(convertToTitleCase(store.getName()));
 		
 		if (doesStoreAlreadyExist(store))
-			throw new DuplicateItemException();
+			throw new StoreDuplicateItemException("This store address already exisit, please enter another one");
 		
 		storeRepository.insert(store);
 	}

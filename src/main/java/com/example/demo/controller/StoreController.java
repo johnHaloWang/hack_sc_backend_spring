@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
 import com.example.demo.data.provider.StoreManager;
+import com.example.demo.exceptions.StoreDuplicateItemException;
 
 import org.bson.types.ObjectId;
 
@@ -86,6 +87,7 @@ public class StoreController {
     * @param latitude
     * @param longitude
     * @return store
+ * @throws StoreDuplicateItemException 
     */
    @RequestMapping(value = "/{storeId}", method = RequestMethod.POST)
    Store updateStore(
@@ -97,7 +99,7 @@ public class StoreController {
            @RequestParam("city") String city,
            @RequestParam("state") String state,
            @RequestParam("latitude") float latitude,
-           @RequestParam("longitude") float longitude){
+           @RequestParam("longitude") float longitude) throws StoreDuplicateItemException{
 	   
        Geolocation geolocation = new Geolocation();
        geolocation.setLatitude(latitude);
@@ -145,6 +147,7 @@ public class StoreController {
     * @param latitude
     * @param longitude
     * @return store
+ * @throws StoreDuplicateItemException 
     */
    @RequestMapping(value = "/add/{name}", method = RequestMethod.PUT)
    Store addStore(
@@ -155,7 +158,7 @@ public class StoreController {
            @RequestParam("city") String city,
            @RequestParam("state") String state,
            @RequestParam("latitude") float latitude,
-           @RequestParam("longitude") float longitude){
+           @RequestParam("longitude") float longitude) throws StoreDuplicateItemException{
 	   
        Geolocation geolocation = new Geolocation();
        geolocation.setLatitude(latitude);

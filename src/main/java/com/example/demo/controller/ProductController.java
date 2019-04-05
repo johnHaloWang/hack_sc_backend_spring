@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Product;
 import com.example.demo.data.provider.ProductManager;
+import com.example.demo.exceptions.ProductDuplicateItemException;
+
 import org.bson.types.ObjectId;
 
 
@@ -45,7 +47,7 @@ public class ProductController {
 			@RequestParam("dateStocked") String stocked_date, 
 			@RequestParam("storeId") String store_id,
 			@RequestParam("latitude") float latitude,
-			@RequestParam("longitude") float longitude){
+			@RequestParam("longitude") float longitude) throws ProductDuplicateItemException{
 		
 		Geolocation loc = new Geolocation();
 		loc.setLatitude(latitude);
@@ -92,7 +94,7 @@ public class ProductController {
 			@RequestParam("dateStocked") String stocked_date, 
 			@RequestParam("storeId") String store_id,
 			@RequestParam("latitude") float latitude,
-			@RequestParam("longitude") float longitude){
+			@RequestParam("longitude") float longitude) throws ProductDuplicateItemException{
 		     
 
 			Geolocation loc = new Geolocation();
