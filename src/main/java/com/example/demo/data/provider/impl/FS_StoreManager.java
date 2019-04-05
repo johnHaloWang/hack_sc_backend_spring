@@ -2,7 +2,7 @@
 /**
  * 
  */
-package com.example.demo.data.provider;
+package com.example.demo.data.provider.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.bson.types.ObjectId;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
+import com.example.demo.data.provider.StoreManager;
 import com.example.demo.data.repository.StoreRepository;
 
 

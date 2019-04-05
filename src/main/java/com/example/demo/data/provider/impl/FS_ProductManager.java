@@ -1,4 +1,4 @@
-package com.example.demo.data.provider;
+package com.example.demo.data.provider.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.List;
 import com.example.demo.data.AverageGasPriceCalculator;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Product;
+import com.example.demo.data.provider.ProductManager;
 import com.example.demo.data.repository.StoreInventoryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

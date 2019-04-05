@@ -39,7 +39,7 @@ import org.bson.types.ObjectId;
  *
  */
 @RestController
-@RequestMapping("/store")
+@RequestMapping("/api/store")
 public class StoreController {
 	/**
     * When the class instance is annotated with

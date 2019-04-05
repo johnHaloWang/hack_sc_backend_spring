@@ -21,7 +21,7 @@ import org.bson.types.ObjectId;
  *
  */
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 public class ProductController {
 
 	@Autowired
