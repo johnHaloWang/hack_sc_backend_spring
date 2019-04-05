@@ -7,7 +7,7 @@ import com.example.demo.data.User;
 import com.example.demo.data.provider.UserManager;
 import com.example.demo.exceptions.UserExistedException;
 import com.example.demo.exceptions.UserPasswordMismatchedException;
-import com.example.demo.exceptions.UserDoesntExistedException;
+import com.example.demo.exceptions.UserDoesntExistException;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +29,18 @@ public class FS_UserManager implements UserManager{
 			userRepository.save(user);
 		}else {
 			if(this.isUsernameExist(user.getUsername())) {
-				throw new UserExistedException("Username already existed, please pick another username!!");	
+				throw new UserExistedException("Username already exists, please pick another username!");	
 			}
 		}
 	}
 
 	@Override
-	public void deleteUser(ObjectId id) throws UserDoesntExistedException{
+	public void deleteUser(ObjectId id) throws UserDoesntExistException{
 		User find = userRepository.findBy_id(id);
 		if(find!=null) {
 			userRepository.delete(find);	
 		}else {
-			throw new UserDoesntExistedException("User doesn't exits!!");
+			throw new UserDoesntExistException("User doesn't exist!");
 		}
 	}
 
@@ -55,21 +55,21 @@ public class FS_UserManager implements UserManager{
 		if(!this.isUsernameExist(user.getUsername())) {
 		    userRepository.insert(user);
 		}else {
-			throw new UserExistedException("Username already existed, please pick another username!!");
+			throw new UserExistedException("Username already exists, please pick another username!!");
 		}
 	}
 
 	@Override
-	public User findUserById(ObjectId id) throws UserDoesntExistedException{
+	public User findUserById(ObjectId id) throws UserDoesntExistException{
 		User find =  this.userRepository.findBy_id(id);
-		if(find==null) throw new UserDoesntExistedException("User doesn't exits!!");
+		if(find==null) throw new UserDoesntExistException("User doesn't exist!");
 		return find;
 	}
 
 	@Override
-	public User findUserByUsernameAndPassword(String username, String password) throws UserPasswordMismatchedException, UserDoesntExistedException{
+	public User findUserByUsernameAndPassword(String username, String password) throws UserPasswordMismatchedException, UserDoesntExistException{
 		User find =  userRepository.findByUsername(username);
-		if(find==null) throw new UserDoesntExistedException("User doesn't exits!!");
+		if(find==null) throw new UserDoesntExistException("User doesn't exist!");
 		if(find.getPassword()!=password) throw new UserPasswordMismatchedException("Wrong password");
 		return find;
 	}
@@ -81,9 +81,9 @@ public class FS_UserManager implements UserManager{
 	}
 
 	@Override
-	public User findUserByUsername(String username) throws UserDoesntExistedException{
+	public User findUserByUsername(String username) throws UserDoesntExistException{
 		User find =  userRepository.findByUsername(username);
-		if(find==null) throw new UserDoesntExistedException("User doesn't exits!!");
+		if(find==null) throw new UserDoesntExistException("User doesn't exist!");
 		return find;
 	}
 

@@ -19,7 +19,7 @@ import com.example.demo.data.Store;
 import com.example.demo.data.User;
 import com.example.demo.data.provider.UserManager;
 import com.example.demo.exceptions.StoreDuplicateItemException;
-import com.example.demo.exceptions.UserDoesntExistedException;
+import com.example.demo.exceptions.UserDoesntExistException;
 import com.example.demo.exceptions.UserExistedException;
 import com.example.demo.exceptions.UserPasswordMismatchedException;
 
@@ -54,13 +54,13 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/{user_id}", method = RequestMethod.DELETE)
-	void deleteUser(@PathVariable("user_id") ObjectId id) throws UserDoesntExistedException {
+	void deleteUser(@PathVariable("user_id") ObjectId id) throws UserDoesntExistException {
 
 		userManager.deleteUser(id);
 	}
 
 	@RequestMapping(value = "/{user_id}", method = RequestMethod.GET)
-	User getUser(@PathVariable("{user_id}") ObjectId id) throws UserDoesntExistedException {
+	User getUser(@PathVariable("{user_id}") ObjectId id) throws UserDoesntExistException {
 
 		User user = userManager.findUserById(id);
 		return user;
@@ -71,7 +71,7 @@ public class UserController {
 			@RequestParam("role") final String role, @RequestParam("contactNumber") String contactNumber,
 			@RequestParam("store_id") String store_id, @RequestParam("name") String name,
 			@RequestParam("email") String email)
-			throws ServletException, UserExistedException, UserDoesntExistedException, UserPasswordMismatchedException {
+			throws ServletException, UserExistedException, UserDoesntExistException, UserPasswordMismatchedException {
 
 		User user = new User(ObjectId.get(), username, password, store_id, contactNumber, role, email);
 		userManager.addUser(user);
@@ -85,7 +85,7 @@ public class UserController {
 			@RequestParam("address") String address, @RequestParam("zipcode") String zipcode,
 			@RequestParam("city") String city, @RequestParam("state") String state, @RequestParam("email") String email,
 			@RequestParam("latitude") float latitude, @RequestParam("longitude") float longitude)
-			throws ServletException, UserExistedException, UserDoesntExistedException, UserPasswordMismatchedException, StoreDuplicateItemException {
+			throws ServletException, UserExistedException, UserDoesntExistException, UserPasswordMismatchedException, StoreDuplicateItemException {
 
 		Geolocation geolocation = new Geolocation();
 		geolocation.setLatitude(latitude);
@@ -121,7 +121,7 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@RequestParam("username") final String username,
 			@RequestParam("password") final String password)
-			throws ServletException, UserDoesntExistedException, UserPasswordMismatchedException {
+			throws ServletException, UserDoesntExistException, UserPasswordMismatchedException {
 		String jwtToken = "";
 
 		if (username == null || password == null) {
