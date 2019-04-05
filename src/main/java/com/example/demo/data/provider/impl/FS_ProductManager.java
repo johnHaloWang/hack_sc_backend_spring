@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.example.demo.controller.DuplicateProductException;
 import com.example.demo.data.AverageGasPriceCalculator;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Product;
 import com.example.demo.data.provider.ProductManager;
 import com.example.demo.data.repository.StoreInventoryRepository;
+
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,6 +54,7 @@ public class FS_ProductManager implements ProductManager{
 	}
 	
 	private double calcGPSDistance(Geolocation geo1, Geolocation geo2) {
+		//TODO Improvement through GPS routes with distance
 		final int EARTH_RADIUS = 6371; // Radius of the earth
 		final int MILLIMETERS_IN_METER = 1000;
 		final double METERS_IN_ONE_MILE = 1609.34;
@@ -84,8 +88,38 @@ public class FS_ProductManager implements ProductManager{
 		return storeInventoryRepository.findAll();
 	}
 	@Override
+	/**
+	 * Adds a product if it doesn't already exist.
+	 * @param product Product to try to add
+	 * @throws DuplicateProductException If the product is a duplicate
+	 */
 	public void addProduct(Product product) {
+		product.setName(convertToTitleCase(product.getName()));
+		if (getProductByName(product.getName()) != null)
+			throw new DuplicateProductException();
 		storeInventoryRepository.insert(product);
+	}
+	
+	/**
+	 * Converts a text to title case (ex: this method becomes This Method)
+	 * @param text Text to convert
+	 * @return Text in title case
+	 */
+	private String convertToTitleCase(String text) {
+		StringBuilder converted = new StringBuilder();
+		boolean nextIsCapital = true;
+		for (char ch : text.toCharArray()) {
+	        if (Character.isSpaceChar(ch))
+	        	nextIsCapital = true;
+	        else if (nextIsCapital) {
+	            ch = Character.toTitleCase(ch);
+	            nextIsCapital = false;
+	        } 
+	        else 
+	            ch = Character.toLowerCase(ch);
+	        converted.append(ch);
+	    }
+		return converted.toString();
 	}
 	
 	@Override

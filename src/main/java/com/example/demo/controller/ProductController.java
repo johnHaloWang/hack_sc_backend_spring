@@ -17,7 +17,7 @@ import org.bson.types.ObjectId;
 
 
 /**
- * @author johnhalowang
+ * @author johnhalowang, Lisa Chen
  *
  */
 @RestController
@@ -83,7 +83,7 @@ public class ProductController {
 	}
 	
 	  @RequestMapping(value = "/add/{name}", method = RequestMethod.PUT)
-	   Product addStore(		   
+	   Product addProduct(		   
 			@RequestParam("name") String name,
 			@RequestParam("pictureFileName") String pictureFileName, 
 			@RequestParam("brand") String brand,
