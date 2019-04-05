@@ -9,9 +9,11 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.bson.types.ObjectId;
+
+import com.example.demo.controller.DuplicateItemException;
 import com.example.demo.data.Geolocation;
+import com.example.demo.data.Product;
 import com.example.demo.data.Store;
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.data.repository.StoreRepository;
@@ -24,7 +26,7 @@ import com.example.demo.data.repository.StoreRepository;
  * This class demonstrates how you can use the file system
  * as a database to store your data.
  * 
- * @author johnhalowang
+ * @author johnhalowang, Lisa Chen
  */
 
 
@@ -40,7 +42,18 @@ public class FS_StoreManager implements StoreManager {
 	}
 
 	@Override
+	/**
+	 * Updates store information, ensuring new information doesn't match a 
+	 * store already in the system under a different ID.
+	 * @param store Store to add
+	 * @throws DuplicateItemException If the product is a duplicate
+	 */
 	public void updateStore(Store store) {	
+		store.setName(convertToTitleCase(store.getName()));
+
+		if (doesStoreAlreadyExist(store))
+			throw new DuplicateItemException();
+		
 		storeRepository.save(store);
 
 	}
@@ -56,11 +69,71 @@ public class FS_StoreManager implements StoreManager {
 	}
 	
 	@Override
+	/**
+	 * Adds a new store, if it doesn't already exist.
+	 * @param store Store to add
+	 * @throws DuplicateItemException If the product is a duplicate
+	 */
 	public void addStore(Store store) {
+		/*
+		 * TODO need to add verification for address input (probably through 
+		 * the geolocation check). Also ensure formatting is standardized for 
+		 * the match.
+		 */
+		store.setName(convertToTitleCase(store.getName()));
+		
+		if (doesStoreAlreadyExist(store))
+			throw new DuplicateItemException();
+		
 		storeRepository.insert(store);
 	}
+	
+	/**
+	 * Checks if the store already exists in the database as a different ID.
+	 * @param store The store to add
+	 * @return True if the store already exists; false otherwise.
+	 */
+	private boolean doesStoreAlreadyExist(Store store) {
+		String storeAddress = store.getStoreAddress();
+		String storeZipCode = store.getZipcode();
+		String storeID = store.get_id();
+		Collection<Store> matchedStores = getStoreByName(store.getName());
+		
+		for (Store match : matchedStores) {
+			if (match.getStoreAddress().equals(storeAddress) && 
+					match.getZipcode().equals(storeZipCode)) {
+				if (match.get_id() == null)
+					return true;
+				else if (match.get_id() != null && !match.get_id().equals(storeID))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Converts a text to title case (ex: this method becomes This Method)
+	 * @param text Text to convert
+	 * @return Text in title case
+	 */
+	private String convertToTitleCase(String text) {
+		StringBuilder converted = new StringBuilder();
+		boolean nextIsCapital = true;
+		for (char ch : text.toCharArray()) {
+	        if (Character.isSpaceChar(ch))
+	        	nextIsCapital = true;
+	        else if (nextIsCapital) {
+	            ch = Character.toTitleCase(ch);
+	            nextIsCapital = false;
+	        } 
+	        else 
+	            ch = Character.toLowerCase(ch);
+	        converted.append(ch);
+	    }
+		return converted.toString();
+	}
 	@Override
-	public Collection<Store>getStoreByName(String name) {
+	public Collection<Store> getStoreByName(String name) {
 		return storeRepository.findByNameLike(name);
 	}
 	

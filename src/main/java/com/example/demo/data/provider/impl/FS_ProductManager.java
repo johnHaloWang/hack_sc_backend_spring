@@ -1,16 +1,20 @@
 package com.example.demo.data.provider.impl;
 
+import io.jsonwebtoken.lang.Collections;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.example.demo.controller.DuplicateProductException;
+import com.example.demo.controller.DuplicateItemException;
 import com.example.demo.data.AverageGasPriceCalculator;
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Product;
 import com.example.demo.data.provider.ProductManager;
 import com.example.demo.data.repository.StoreInventoryRepository;
+
+
 
 
 import org.bson.types.ObjectId;
@@ -49,7 +53,7 @@ public class FS_ProductManager implements ProductManager{
 	}
 
 	@Override
-	public Collection<Product>getProductByName(String name) {
+	public Collection<Product> getProductByName(String name) {
 		return storeInventoryRepository.findByNameLike(name);
 	}
 	
@@ -74,7 +78,16 @@ public class FS_ProductManager implements ProductManager{
 	}
 	
 	@Override
+	/**
+	 * Updates product information, ensuring new information doesn't match a 
+	 * product already in the system under a different ID with the same store.
+	 * @param product Product to try to add
+	 * @throws DuplicateItemException If the product is a duplicate
+	 */
 	public void updateProduct(Product product) {
+		product.setName(convertToTitleCase(product.getName()));
+		if (!doesProductAlreadyExist(product))
+			throw new DuplicateItemException();
 		storeInventoryRepository.save(product);
 	}
 	
@@ -91,13 +104,37 @@ public class FS_ProductManager implements ProductManager{
 	/**
 	 * Adds a product if it doesn't already exist.
 	 * @param product Product to try to add
-	 * @throws DuplicateProductException If the product is a duplicate
+	 * @throws DuplicateItemException If the product is a duplicate
 	 */
 	public void addProduct(Product product) {
 		product.setName(convertToTitleCase(product.getName()));
-		if (getProductByName(product.getName()) != null)
-			throw new DuplicateProductException();
+		
+		if (!doesProductAlreadyExist(product))
+			throw new DuplicateItemException();
+		
 		storeInventoryRepository.insert(product);
+	}
+	
+	/**
+	 * Checks if the product already exists in the database as a different ID
+	 * under the same store ID.
+	 * @param product The product to add
+	 * @return True if the product already exists; false otherwise.
+	 */
+	private boolean doesProductAlreadyExist(Product product) {
+		String storeID = product.getStore_id();
+		String productID = product.get_id();
+		Collection<Product> matchedProducts = getProductByName(product.getName());
+		
+		for (Product match : matchedProducts) {
+			if (match.getStore_id().equals(storeID)) {
+				if (match.get_id() == null)
+					return true;
+				else if (match.get_id() != null && !match.get_id().equals(productID))
+					return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
