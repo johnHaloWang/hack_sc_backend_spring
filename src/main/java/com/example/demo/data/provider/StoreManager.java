@@ -8,9 +8,9 @@ import org.bson.types.ObjectId;
 import java.util.Collection;
 import java.util.List;
 
-import com.example.demo.data.Geolocation;
-import com.example.demo.data.Store;
 import com.example.demo.exceptions.StoreDuplicateItemException;
+import com.example.demo.model.Geolocation;
+import com.example.demo.model.Store;
 
 /**
  * @author johnhalowang

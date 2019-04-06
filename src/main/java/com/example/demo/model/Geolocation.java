@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.example.demo.data;
+package com.example.demo.model;
 
 /**
  * The basic geolocation object

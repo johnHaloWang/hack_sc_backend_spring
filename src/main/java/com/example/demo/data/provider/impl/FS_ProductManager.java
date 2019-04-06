@@ -6,9 +6,9 @@ import java.util.Collection;
 import java.util.List;
 
 import com.example.demo.exceptions.ProductDuplicateItemException;
-import com.example.demo.data.AverageGasPriceCalculator;
-import com.example.demo.data.Geolocation;
-import com.example.demo.data.Product;
+import com.example.demo.model.AverageGasPriceCalculator;
+import com.example.demo.model.Geolocation;
+import com.example.demo.model.Product;
 import com.example.demo.data.provider.ProductManager;
 import com.example.demo.data.repository.StoreInventoryRepository;
 

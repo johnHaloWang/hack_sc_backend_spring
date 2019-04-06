@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.bson.types.ObjectId;
 
 import com.example.demo.exceptions.StoreDuplicateItemException;
-import com.example.demo.data.Geolocation;
-import com.example.demo.data.Store;
+import com.example.demo.model.Geolocation;
+import com.example.demo.model.Store;
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.data.repository.StoreRepository;
 

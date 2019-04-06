@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.data.Geolocation;
-import com.example.demo.data.Store;
+
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.exceptions.StoreDuplicateItemException;
+import com.example.demo.model.Geolocation;
+import com.example.demo.model.Store;
 
 import org.bson.types.ObjectId;
 
@@ -149,7 +150,7 @@ public class StoreController {
     * @return store
  * @throws StoreDuplicateItemException 
     */
-   @RequestMapping(value = "/add/{name}", method = RequestMethod.PUT)
+   @RequestMapping(value = "/add", method = RequestMethod.PUT)
    Store addStore(
            @RequestParam("name") String name,
            @RequestParam("pictureFileName") String pictureFileName,

@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.data.Geolocation;
-import com.example.demo.data.Product;
+
 import com.example.demo.data.provider.ProductManager;
 import com.example.demo.exceptions.ProductDuplicateItemException;
+import com.example.demo.model.Geolocation;
+import com.example.demo.model.Product;
 
 import org.bson.types.ObjectId;
 
@@ -30,7 +31,7 @@ public class ProductController {
 	private ProductManager productManager;
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
-	Product getProduct(@PathVariable("productId") ObjectId id) {
+	Product getStore(@PathVariable("productId") ObjectId id) {
 		
 		// using MongoRepository to handle it
 		Product product = productManager.findProductById(id);
@@ -38,7 +39,7 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.POST)
-	Product updateProduct(@PathVariable("productId") ObjectId id, 
+	Product updateStore(@PathVariable("productId") ObjectId id, 
 			@RequestParam("name") String name,
 			@RequestParam("pictureFileName") String pictureFileName, 
 			@RequestParam("brand") String brand,
@@ -58,7 +59,7 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.DELETE)
-	void deleteProduct(@PathVariable("productId") ObjectId id) {
+	void deleteStore(@PathVariable("productId") ObjectId id) {
 		
 		productManager.deleteProduct(id);
 	}

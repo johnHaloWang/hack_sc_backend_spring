@@ -8,8 +8,8 @@ import java.util.Collection;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.example.demo.data.Product;
-import com.example.demo.data.Store;
+import com.example.demo.model.Product;
+import com.example.demo.model.Store;
 
 /**
  * @author johnwang

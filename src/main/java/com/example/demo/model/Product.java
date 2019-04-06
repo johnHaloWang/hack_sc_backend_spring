@@ -1,9 +1,10 @@
-package com.example.demo.data;
+package com.example.demo.model;
 
 
 import java.util.Date;
 import org.bson.types.ObjectId;
-import com.example.demo.data.Geolocation;
+
+import com.example.demo.model.Geolocation;
 
 
 /**

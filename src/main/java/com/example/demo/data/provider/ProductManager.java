@@ -3,9 +3,9 @@
  */
 package com.example.demo.data.provider;
 
-import com.example.demo.data.Product;
 import com.example.demo.exceptions.ProductDuplicateItemException;
-import com.example.demo.data.Geolocation;
+import com.example.demo.model.Geolocation;
+import com.example.demo.model.Product;
 
 import java.io.IOException;
 import java.util.Collection;
