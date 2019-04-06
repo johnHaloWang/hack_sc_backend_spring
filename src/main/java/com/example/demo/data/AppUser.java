@@ -21,7 +21,7 @@ import org.bson.types.ObjectId;
 //@Value
 //@Builder
 //@Document
-public class User {
+public class AppUser {
 	//implements UserDetails {
 	//private static final long serialVersionUID = 2396654715019746670L;
 	private ObjectId _id;
@@ -110,7 +110,7 @@ public class User {
 	
 
 	
-	public User(ObjectId _id, 
+	public AppUser(ObjectId _id, 
 		 String username,
 		 String password,
 		 String store_id,

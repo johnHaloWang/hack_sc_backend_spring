@@ -30,7 +30,7 @@ public class ProductController {
 	private ProductManager productManager;
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
-	Product getStore(@PathVariable("productId") ObjectId id) {
+	Product getProduct(@PathVariable("productId") ObjectId id) {
 		
 		// using MongoRepository to handle it
 		Product product = productManager.findProductById(id);
@@ -38,7 +38,7 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.POST)
-	Product updateStore(@PathVariable("productId") ObjectId id, 
+	Product updateProduct(@PathVariable("productId") ObjectId id, 
 			@RequestParam("name") String name,
 			@RequestParam("pictureFileName") String pictureFileName, 
 			@RequestParam("brand") String brand,
@@ -58,7 +58,7 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.DELETE)
-	void deleteStore(@PathVariable("productId") ObjectId id) {
+	void deleteProduct(@PathVariable("productId") ObjectId id) {
 		
 		productManager.deleteProduct(id);
 	}

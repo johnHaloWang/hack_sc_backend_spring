@@ -3,7 +3,7 @@ package com.example.demo.data.provider.impl;
 import java.util.List;
 
 import com.example.demo.data.repository.UserRepository;
-import com.example.demo.data.User;
+import com.example.demo.data.AppUser;
 import com.example.demo.data.provider.UserManager;
 import com.example.demo.exceptions.UserExistedException;
 import com.example.demo.exceptions.UserPasswordMismatchedException;
@@ -22,9 +22,9 @@ public class FS_UserManager implements UserManager{
 	private UserRepository userRepository;
 	
 	@Override
-	public void updateUser(User user) throws UserExistedException{
+	public void updateUser(AppUser user) throws UserExistedException{
 		
-		User find = userRepository.findBy_id(user.get_ObjectId());
+		AppUser find = userRepository.findBy_id(user.get_ObjectId());
 		if(user.getUsername().equals(find.getUsername())) {
 			userRepository.save(user);
 		}else {
@@ -36,7 +36,7 @@ public class FS_UserManager implements UserManager{
 
 	@Override
 	public void deleteUser(ObjectId id) throws UserDoesntExistException{
-		User find = userRepository.findBy_id(id);
+		AppUser find = userRepository.findBy_id(id);
 		if(find!=null) {
 			userRepository.delete(find);	
 		}else {
@@ -45,12 +45,12 @@ public class FS_UserManager implements UserManager{
 	}
 
 	@Override
-	public List<User> listAllUsers() {
+	public List<AppUser> listAllUsers() {
 		return userRepository.findAll();
 	}
 
 	@Override
-	public void addUser(User user) throws UserExistedException {
+	public void addUser(AppUser user) throws UserExistedException {
 	
 		if(!this.isUsernameExist(user.getUsername())) {
 		    userRepository.insert(user);
@@ -60,15 +60,15 @@ public class FS_UserManager implements UserManager{
 	}
 
 	@Override
-	public User findUserById(ObjectId id) throws UserDoesntExistException{
-		User find =  this.userRepository.findBy_id(id);
+	public AppUser findUserById(ObjectId id) throws UserDoesntExistException{
+		AppUser find =  this.userRepository.findBy_id(id);
 		if(find==null) throw new UserDoesntExistException("User doesn't exist!");
 		return find;
 	}
 
 	@Override
-	public User findUserByUsernameAndPassword(String username, String password) throws UserPasswordMismatchedException, UserDoesntExistException{
-		User find =  userRepository.findByUsername(username);
+	public AppUser findUserByUsernameAndPassword(String username, String password) throws UserPasswordMismatchedException, UserDoesntExistException{
+		AppUser find =  userRepository.findByUsername(username);
 		if(find==null) throw new UserDoesntExistException("User doesn't exist!");
 		if(find.getPassword()!=password) throw new UserPasswordMismatchedException("Wrong password");
 		return find;
@@ -76,13 +76,13 @@ public class FS_UserManager implements UserManager{
 
 	@Override
 	public boolean isUsernameExist(String username) {
-		User find = userRepository.findByUsername(username);	
+		AppUser find = userRepository.findByUsername(username);	
 		return (find==null)?false:true;
 	}
 
 	@Override
-	public User findUserByUsername(String username) throws UserDoesntExistException{
-		User find =  userRepository.findByUsername(username);
+	public AppUser findUserByUsername(String username) throws UserDoesntExistException{
+		AppUser find =  userRepository.findByUsername(username);
 		if(find==null) throw new UserDoesntExistException("User doesn't exist!");
 		return find;
 	}

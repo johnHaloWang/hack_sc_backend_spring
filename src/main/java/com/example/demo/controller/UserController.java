@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.data.Geolocation;
 import com.example.demo.data.Store;
-import com.example.demo.data.User;
+import com.example.demo.data.AppUser;
 import com.example.demo.data.provider.UserManager;
 import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.exceptions.UserDoesntExistException;
@@ -38,17 +38,21 @@ public class UserController {
 	private StoreManager storeManager;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	List<User> listAllUsers() {
+	List<AppUser> listAllUsers() {
 		return userManager.listAllUsers();
 	}
 
 	@RequestMapping(value = "/{user_id}", method = RequestMethod.POST)
-	User updateUser(@RequestParam("username") String username, @RequestParam("password") String password,
-			@RequestParam("role") final String role, @RequestParam("contactNumber") String contactNumber,
-			@RequestParam("store_id") String store_id, @RequestParam("email") String email)
+	AppUser updateUser(
+			@RequestParam("username") String username, 
+			@RequestParam("password") String password,
+			@RequestParam("role") final String role,
+			@RequestParam("contactNumber") String contactNumber,
+			@RequestParam("store_id") String store_id, 
+			@RequestParam("email") String email)
 			throws UserExistedException {
 
-		User user = new User(ObjectId.get(), username, password, store_id, contactNumber, role, email);
+		AppUser user = new AppUser(ObjectId.get(), username, password, store_id, contactNumber, role, email);
 		userManager.updateUser(user);
 		return user;
 	}
@@ -60,20 +64,20 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/{user_id}", method = RequestMethod.GET)
-	User getUser(@PathVariable("{user_id}") ObjectId id) throws UserDoesntExistException {
+	AppUser getUser(@PathVariable("{user_id}") ObjectId id) throws UserDoesntExistException {
 
-		User user = userManager.findUserById(id);
+		AppUser user = userManager.findUserById(id);
 		return user;
 	}
 
 	@RequestMapping(value = "/add/{username}", method = RequestMethod.PUT)
-	User addUser(@PathVariable("username") String username, @RequestParam("password") String password,
+	AppUser addUser(@PathVariable("username") String username, @RequestParam("password") String password,
 			@RequestParam("role") final String role, @RequestParam("contactNumber") String contactNumber,
 			@RequestParam("store_id") String store_id, @RequestParam("name") String name,
 			@RequestParam("email") String email)
 			throws ServletException, UserExistedException, UserDoesntExistException, UserPasswordMismatchedException {
 
-		User user = new User(ObjectId.get(), username, password, store_id, contactNumber, role, email);
+		AppUser user = new AppUser(ObjectId.get(), username, password, store_id, contactNumber, role, email);
 		userManager.addUser(user);
 		return user;
 	}
@@ -93,7 +97,7 @@ public class UserController {
 		ObjectId store_id = ObjectId.get();
 		Store store = new Store(store_id, name, pictureFileName, geolocation, address, zipcode, city, state);
 		storeManager.addStore(store);
-		User user = new User(ObjectId.get(), username, password, store.get_id(), contactNumber, role, email);
+		AppUser user = new AppUser(ObjectId.get(), username, password, store.get_id(), contactNumber, role, email);
 
 		userManager.addUser(user);
 		return login(user.getUsername(), user.getPassword());
@@ -114,7 +118,7 @@ public class UserController {
 		ObjectId store_id = ObjectId.get();
 		Store store = new Store(store_id, name, pictureFileName, geolocation, address, zipcode, city, state);
 		storeManager.addStore(store);
-		User user = new User(ObjectId.get(), username, password, store.get_id(), contactNumber, role, email);
+		AppUser user = new AppUser(ObjectId.get(), username, password, store.get_id(), contactNumber, role, email);
 		userManager.addUser(user);
 	}
 
@@ -128,10 +132,12 @@ public class UserController {
 			throw new ServletException("Please fill in username and password");
 		}
 
-		User user = userManager.findUserByUsername(username);
+		AppUser user = userManager.findUserByUsername(username);
 
 		String pwd = user.getPassword();
 
+		System.out.println(password);
+		System.out.println(pwd);
 		if (!password.equals(pwd))
 			throw new UserPasswordMismatchedException("Invalid login. Wrong password.");
 
