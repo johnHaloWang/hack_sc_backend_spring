@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.converter.ConverterFacade;
+import com.example.demo.model.Authority;
 import com.example.demo.model.Store;
 import com.example.demo.model.User;
 import com.example.demo.data.provider.StoreManager;
@@ -17,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 
 @RestController
@@ -68,6 +73,7 @@ public class SignUpController {
 	public ResponseEntity<?> signUp(@RequestBody final RegisterDTO dto) throws StoreDuplicateItemException {
 
 		ObjectId store_id = ObjectId.get();
+		
 		Store store = converterFacade.convertStoreDTO(dto.getStore());
 		store.set_id(store_id);
 		storeManager.addStore(store);

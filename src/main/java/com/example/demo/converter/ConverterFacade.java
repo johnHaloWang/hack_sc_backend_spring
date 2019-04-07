@@ -22,19 +22,19 @@ public class ConverterFacade {
     private ConverterFactory converterFactory;
     
     Logger logger = LogManager.getLogger(AuthenticationController.class);
-    @SuppressWarnings("unchecked")
+
     public User convertUserDTO(final UserDTO dto) {
         return (User) converterFactory.getUserConverter(dto.getClass()).convert(dto);
     }
-    @SuppressWarnings("unchecked")
+
     public User convertRegisterDTO(final RegisterDTO dto) {
         return (User) converterFactory.getRegisterConverter(dto.getClass()).convert(dto);
     }
-    @SuppressWarnings("unchecked")
+
 	public Store convertStoreDTO(final StoreDTO dto) {
         return (Store) converterFactory.getStoreConverter(dto.getClass()).convert(dto);
     }
-    @SuppressWarnings("unchecked")
+
 	public Product convertProductTO(final ProductDTO dto) {
         return (Product) converterFactory.getProductConverter(dto.getClass()).convert(dto);
     }

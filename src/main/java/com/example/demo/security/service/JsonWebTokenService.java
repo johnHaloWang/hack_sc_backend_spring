@@ -41,7 +41,6 @@ public class JsonWebTokenService implements TokenService {
 
     @Override
     public String getToken(final String username, final String password) {
-    	logger.info("in ... get token");
         if (username == null || password == null) {
             return null;
         }

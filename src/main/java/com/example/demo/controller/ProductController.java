@@ -61,7 +61,7 @@ public class ProductController {
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public ResponseEntity<?> deleteProduct(@RequestBody final IndexDTO dto) {
 
 		productManager.deleteProduct(dto.get_id());
