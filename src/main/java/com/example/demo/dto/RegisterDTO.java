@@ -24,7 +24,6 @@ public class RegisterDTO implements Serializable{
 	private String contactNumber;
 	private String role;
 	private String email;
-	private String name;
 	private StoreDTO store;
 
 	private String creationTime = new Date(System.currentTimeMillis()).toString();

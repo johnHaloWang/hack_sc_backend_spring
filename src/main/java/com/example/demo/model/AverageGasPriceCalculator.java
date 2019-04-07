@@ -46,7 +46,7 @@ public class AverageGasPriceCalculator {
         InputStreamReader is = new InputStreamReader(apiURL.openStream());
         BufferedReader in = new BufferedReader(is);
         String temp = in.readLine();
-        int count = 0;
+//        int count = 0;
         while (temp != null) {
             result += temp;
             temp = in.readLine();

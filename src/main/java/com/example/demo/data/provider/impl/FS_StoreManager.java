@@ -92,7 +92,7 @@ public class FS_StoreManager implements StoreManager {
 	private boolean doesStoreAlreadyExist(Store store) {
 		String storeAddress = store.getStoreAddress();
 		String storeZipCode = store.getZipcode();
-		String storeID = store.get_id();
+		//String storeID = store.get_id();
 		Collection<Store> matchedStores = getStoreByName(store.getName());
 		
 		for (Store match : matchedStores) {
