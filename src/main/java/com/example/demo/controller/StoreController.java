@@ -77,8 +77,11 @@ public class StoreController {
    
    @RequestMapping(value = "/get", method = RequestMethod.GET)
 	public ResponseEntity<?> getStore(@RequestBody final IndexDTO dto) {
-
-		return new ResponseEntity<>(storeManager.getStore(dto.get_id()), HttpStatus.OK);
+	   	logger.info(dto.get_id().toHexString());
+	   	Store store = storeManager.getStore(dto.get_id());
+	   	if(store==null)
+	   		return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(store, HttpStatus.OK);
 	}
    
    /**
@@ -104,6 +107,22 @@ public class StoreController {
     * @param longitude
     * @return store
  * @throws StoreDuplicateItemException 
+ * 
+ * 
+ {
+        "_id": "5c9ed68a0e3a5f165f8446c0",
+        "name": "daiso",
+        "creationTime": "Sun Apr 07 04:35:09 PDT 2019",
+        "pictureFileName": "cat.jpg",
+        "geolocation": {
+            "latitude": 34.55,
+            "longitude": -17.22
+        },
+        "address": "sdfa",
+        "zipcode": "sfdasdf",
+        "city": "sfdasdf",
+        "state": "ca"
+ }
     */
    
    
@@ -121,6 +140,11 @@ public class StoreController {
     * This API deletes the store. It uses HTTP DELETE method.
     *
     * @param storeId
+    * 
+    * 
+    * {
+    * 		"_id": <store id>
+    * }
     */
    
    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
@@ -155,6 +179,23 @@ public class StoreController {
     * @param longitude
     * @return store
  * @throws StoreDuplicateItemException 
+ * 
+ {
+
+        "name": "daiso2-test",
+        "pictureFileName": "cat.jpg",
+        "geolocation": {
+            "latitude": 34.55,
+            "longitude": -17.22
+        },
+        "address": "sdfa",
+        "zipcode": "sfdasdf",
+        "city": "sfdasdf",
+        "state": "ca"
+ }
+ * 
+ * 
+ * 
     */
    
    @RequestMapping(value = "/add", method = RequestMethod.PUT)

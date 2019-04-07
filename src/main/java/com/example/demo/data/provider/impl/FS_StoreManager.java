@@ -14,9 +14,11 @@ import org.bson.types.ObjectId;
 import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.model.Geolocation;
 import com.example.demo.model.Store;
+import com.example.demo.controller.AuthenticationController;
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.data.repository.StoreRepository;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The implementation of {@link StoreManager} interface
@@ -31,7 +33,7 @@ import com.example.demo.data.repository.StoreRepository;
 
 public class FS_StoreManager implements StoreManager {
 
-		
+	Logger logger = LogManager.getLogger(AuthenticationController.class);
 	@Autowired
 	private StoreRepository storeRepository;
 	
@@ -49,7 +51,8 @@ public class FS_StoreManager implements StoreManager {
 	 */
 	public void updateStore(Store store) throws StoreDuplicateItemException{	
 		store.setName(convertToTitleCase(store.getName()));
-
+		logger.info(store.getAddress());
+		
 		if (doesStoreAlreadyExist(store))
 			throw new StoreDuplicateItemException("This store address already exists, please enter another one.");
 		storeRepository.save(store);

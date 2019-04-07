@@ -14,13 +14,10 @@ import java.util.Map;
 @Component
 public class ConverterFactory {
 
-    @SuppressWarnings("rawtypes")
+
 	private Map<Object, Converter> userConverters;
-    @SuppressWarnings("rawtypes")
 	private Map<Object, Converter> registerConverters;
-    @SuppressWarnings("rawtypes")
 	private Map<Object, Converter> storeConverters;
-    @SuppressWarnings("rawtypes")
     private Map<Object, Converter> productConverters;
     public ConverterFactory() {
 
@@ -40,19 +37,17 @@ public class ConverterFactory {
         
     }
 
-    @SuppressWarnings("rawtypes")
 	public Converter getUserConverter(final Object type) {
         return userConverters.get(type);
     }
-    @SuppressWarnings("rawtypes")
+
 	public Converter getRegisterConverter(final Object type) {
         return registerConverters.get(type);
-    }
-    @SuppressWarnings("rawtypes")
+	}
 	public Converter getStoreConverter(final Object type) {
         return storeConverters.get(type);
     }
-    @SuppressWarnings("rawtypes")
+ 
 	public Converter getProductConverter(final Object type) {
         return productConverters.get(type);
     }

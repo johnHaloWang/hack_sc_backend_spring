@@ -1,16 +1,14 @@
 package com.example.demo.converter.dto;
 
 import com.example.demo.dto.ProductDTO;
-import com.example.demo.dto.RegisterDTO;
-import com.example.demo.model.Authority;
-import com.example.demo.model.Product;
-import com.example.demo.model.User;
 
-import org.bson.types.ObjectId;
+import com.example.demo.model.Product;
+
+
+
 import org.springframework.core.convert.converter.Converter;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class ProductDTOConverter implements Converter<ProductDTO, Product> {
 
@@ -18,6 +16,7 @@ public class ProductDTOConverter implements Converter<ProductDTO, Product> {
 	public Product convert(ProductDTO dto) {
 		final Product product = new Product();
 		
+
 		product.setAvailable(dto.isAvailable());
 		product.setBrand(dto.getBrand());
 		product.setCreationTime(dto.getCreationTime());
