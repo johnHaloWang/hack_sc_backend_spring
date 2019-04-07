@@ -5,8 +5,10 @@ import com.example.demo.converter.factory.ConverterFactory;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.dto.RegisterDTO;
 import com.example.demo.dto.StoreDTO;
+import com.example.demo.dto.ProductDTO;
 import com.example.demo.model.User;
 import com.example.demo.model.Store;
+import com.example.demo.model.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,5 +33,9 @@ public class ConverterFacade {
     @SuppressWarnings("unchecked")
 	public Store convertStoreDTO(final StoreDTO dto) {
         return (Store) converterFactory.getStoreConverter(dto.getClass()).convert(dto);
+    }
+    @SuppressWarnings("unchecked")
+	public Product convertProductTO(final ProductDTO dto) {
+        return (Product) converterFactory.getProductConverter(dto.getClass()).convert(dto);
     }
 }

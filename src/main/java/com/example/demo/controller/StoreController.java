@@ -4,23 +4,31 @@
 package com.example.demo.controller;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import com.example.demo.DemoApplication;
+import com.example.demo.converter.ConverterFacade;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.data.provider.StoreManager;
+import com.example.demo.dto.GeoRequestDTO;
+import com.example.demo.dto.IndexDTO;
+import com.example.demo.dto.StoreDTO;
+
 import com.example.demo.exceptions.StoreDuplicateItemException;
-import com.example.demo.model.Geolocation;
 import com.example.demo.model.Store;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
 
 
@@ -39,6 +47,14 @@ import org.bson.types.ObjectId;
 @RestController
 @RequestMapping("/api/store")
 public class StoreController {
+	Logger logger = LogManager.getLogger(AuthenticationController.class);
+	private final ConverterFacade converterFacade;
+	
+	@Autowired
+	public StoreController(final ConverterFacade converterFacade) {
+
+		this.converterFacade = converterFacade;
+	}
 	/**
     * When the class instance is annotated with
     * {@link Autowired}, it will be looking for the actual
@@ -58,13 +74,12 @@ public class StoreController {
     * Try it in your web browser:
     *     http://localhost:5000/john/store/store101
     */
-   @RequestMapping(value = "/{storeId}", method = RequestMethod.GET)
-   Store getStore(@PathVariable("storeId") ObjectId id) {
-
-       Store store = storeManager.getStore(id);
-       return store;
-   }
    
+   @RequestMapping(value = "/get", method = RequestMethod.GET)
+	public ResponseEntity<?> getStore(@RequestBody final IndexDTO dto) {
+
+		return new ResponseEntity<>(storeManager.getStore(dto.get_id()), HttpStatus.OK);
+	}
    
    /**
     * This is an example of sending an HTTP POST request to
@@ -90,26 +105,16 @@ public class StoreController {
     * @return store
  * @throws StoreDuplicateItemException 
     */
-   @RequestMapping(value = "/{storeId}", method = RequestMethod.POST)
-   Store updateStore(
-           @PathVariable("storeId") ObjectId id,
-           @RequestParam("name") String name,
-           @RequestParam("pictureFileName") String pictureFileName,
-           @RequestParam("address") String address,
-           @RequestParam("zipcode") String zipcode,
-           @RequestParam("city") String city,
-           @RequestParam("state") String state,
-           @RequestParam("latitude") float latitude,
-           @RequestParam("longitude") float longitude) throws StoreDuplicateItemException{
-	   
-       Geolocation geolocation = new Geolocation();
-       geolocation.setLatitude(latitude);
-       geolocation.setLongitude(longitude);
-       Store store = new Store(id, name, pictureFileName, geolocation, address,
-				zipcode, city, state);
-       storeManager.updateStore(store);
-       return store;
-   }
+   
+   
+   @RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ResponseEntity<?> updateStore(@RequestBody final StoreDTO dto) throws StoreDuplicateItemException {
+
+		Store store = converterFacade.convertStoreDTO(dto);
+		storeManager.updateStore(store);
+		return new ResponseEntity<>(store, HttpStatus.OK);
+	}
+   
    
    
    /**
@@ -117,12 +122,13 @@ public class StoreController {
     *
     * @param storeId
     */
-   @RequestMapping(value = "/{storeId}", method = RequestMethod.DELETE)
-   void deleteStore(
-           @PathVariable("storeId") ObjectId id) {
-   	
-	   storeManager.deleteStore(id);
-   }
+   
+   @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	public ResponseEntity<?> deleteProduct(@RequestBody final IndexDTO dto) {
+
+		storeManager.deleteStore(dto.get_id());
+		return new ResponseEntity<>(dto.get_id().toHexString(), HttpStatus.OK);
+	}
    
    
    /**
@@ -150,26 +156,16 @@ public class StoreController {
     * @return store
  * @throws StoreDuplicateItemException 
     */
+   
    @RequestMapping(value = "/add", method = RequestMethod.PUT)
-   Store addStore(
-           @RequestParam("name") String name,
-           @RequestParam("pictureFileName") String pictureFileName,
-           @RequestParam("address") String address,
-           @RequestParam("zipcode") String zipcode,
-           @RequestParam("city") String city,
-           @RequestParam("state") String state,
-           @RequestParam("latitude") float latitude,
-           @RequestParam("longitude") float longitude) throws StoreDuplicateItemException{
-	   
-       Geolocation geolocation = new Geolocation();
-       geolocation.setLatitude(latitude);
-       geolocation.setLongitude(longitude);
+	public ResponseEntity<?> addProduct(@RequestBody final StoreDTO dto) throws StoreDuplicateItemException {
 
-       Store store = new Store(ObjectId.get(), name, pictureFileName, geolocation, address,
-				zipcode, city, state);
-       storeManager.addStore(store);
-       return store;
-   }
+		Store store = converterFacade.convertStoreDTO(dto);
+		store.set_id(ObjectId.get());
+		storeManager.addStore(store);
+		return new ResponseEntity<>(store, HttpStatus.OK);
+	}
+
    
    /**
     * This API list a list of that closed to a store (store name)
@@ -180,17 +176,12 @@ public class StoreController {
     * @param radius
     * @return
     */
-   
-   @RequestMapping(value = "/listGeo/{name}", method = RequestMethod.GET)
-	List<Store> listNameByRadius(
-			@RequestParam("name") String name,
-			@RequestParam("latitude") float latitude,
-			@RequestParam("longitude") float longitude,
-			@RequestParam("radius") float radius){
-		
-		Geolocation geo = new Geolocation();
-		geo.setLatitude(latitude);
-		geo.setLongitude(longitude);
-		return storeManager.getStoreRadius(name, geo, radius);
+   @RequestMapping(value = "/listGeo", method = RequestMethod.GET)
+	public ResponseEntity<?> listGeo(@RequestBody final GeoRequestDTO dto) throws IOException {
+
+		return new ResponseEntity<>(
+				storeManager.getStoreRadius(dto.getName(), dto.getGeolocation(), dto.getRadius()),
+				HttpStatus.OK);
 	}
+   
 }

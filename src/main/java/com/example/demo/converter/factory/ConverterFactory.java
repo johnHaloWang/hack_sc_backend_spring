@@ -20,7 +20,8 @@ public class ConverterFactory {
 	private Map<Object, Converter> registerConverters;
     @SuppressWarnings("rawtypes")
 	private Map<Object, Converter> storeConverters;
-    
+    @SuppressWarnings("rawtypes")
+    private Map<Object, Converter> productConverters;
     public ConverterFactory() {
 
     }
@@ -30,9 +31,12 @@ public class ConverterFactory {
     	userConverters = new HashMap<>();
     	registerConverters = new HashMap<>();
     	storeConverters = new HashMap<>();
+    	productConverters = new HashMap<>();
+    	
     	userConverters.put(UserDTO.class, new UserDTOConverter());
     	registerConverters.put(RegisterDTO.class, new RegisterDTOConverter());
     	storeConverters.put(StoreDTO.class, new StoreDTOConverter());
+    	productConverters.put(ProductDTO.class, new ProductDTOConverter());
         
     }
 
@@ -47,5 +51,9 @@ public class ConverterFactory {
     @SuppressWarnings("rawtypes")
 	public Converter getStoreConverter(final Object type) {
         return storeConverters.get(type);
+    }
+    @SuppressWarnings("rawtypes")
+	public Converter getProductConverter(final Object type) {
+        return productConverters.get(type);
     }
 }

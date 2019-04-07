@@ -3,21 +3,28 @@ package com.example.demo.controller;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.converter.ConverterFacade;
 import com.example.demo.data.provider.ProductManager;
 import com.example.demo.exceptions.ProductDuplicateItemException;
-import com.example.demo.model.Geolocation;
+
 import com.example.demo.model.Product;
 
+import com.example.demo.dto.IndexDTO;
+import com.example.demo.dto.ProductDTO;
+import com.example.demo.dto.GeoRequestDTO;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
-
-
 
 /**
  * @author johnhalowang, Lisa Chen
@@ -27,82 +34,60 @@ import org.bson.types.ObjectId;
 @RequestMapping("/api/product")
 public class ProductController {
 
+	Logger logger = LogManager.getLogger(AuthenticationController.class);
+	private final ConverterFacade converterFacade;
+
 	@Autowired
 	private ProductManager productManager;
 
-	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
-	Product getStore(@PathVariable("productId") ObjectId id) {
-		
-		// using MongoRepository to handle it
-		Product product = productManager.findProductById(id);
-		return product;
+	@Autowired
+	public ProductController(final ConverterFacade converterFacade) {
+
+		this.converterFacade = converterFacade;
 	}
 
-	@RequestMapping(value = "/{productId}", method = RequestMethod.POST)
-	Product updateStore(@PathVariable("productId") ObjectId id, 
-			@RequestParam("name") String name,
-			@RequestParam("pictureFileName") String pictureFileName, 
-			@RequestParam("brand") String brand,
-			@RequestParam("price") double price, 
-			@RequestParam("available,") boolean available,
-			@RequestParam("dateStocked") String stocked_date, 
-			@RequestParam("storeId") String store_id,
-			@RequestParam("latitude") float latitude,
-			@RequestParam("longitude") float longitude) throws ProductDuplicateItemException{
-		
-		Geolocation loc = new Geolocation();
-		loc.setLatitude(latitude);
-		loc.setLongitude(longitude);		
-		Product p = new Product(id, store_id, price, name, brand, available, stocked_date, pictureFileName, loc);
-		productManager.updateProduct(p);
-		return p;
+	@RequestMapping(value = "/get", method = RequestMethod.GET)
+	public ResponseEntity<?> getProduct(@RequestBody final IndexDTO dto) {
+
+		productManager.deleteProduct(dto.get_id());
+		return new ResponseEntity<>(productManager.findProductById(dto.get_id()), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{productId}", method = RequestMethod.DELETE)
-	void deleteStore(@PathVariable("productId") ObjectId id) {
-		
-		productManager.deleteProduct(id);
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ResponseEntity<?> updateProduct(@RequestBody final ProductDTO dto) throws ProductDuplicateItemException {
+
+		Product product = converterFacade.convertProductTO(dto);
+		productManager.updateProduct(product);
+		return new ResponseEntity<>(product, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	public ResponseEntity<?> deleteProduct(@RequestBody final IndexDTO dto) {
+
+		productManager.deleteProduct(dto.get_id());
+		return new ResponseEntity<>(dto.get_id().toHexString(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	List<Product> listAllProducts() {
-		
+
 		return productManager.listAllProducts();
 	}
-	
-	
-	@RequestMapping(value = "/listGeo/{name}", method = RequestMethod.GET)
-	List<Product> listNameByRadius(
-			@RequestParam("name") String name,
-			@RequestParam("latitude") float latitude,
-			@RequestParam("longitude") float longitude,
-			@RequestParam("radius") float radius,
-			@RequestParam("mpg") float mpg) throws IOException{
-		
-		Geolocation geo = new Geolocation();
-		geo.setLatitude(latitude);
-		geo.setLongitude(longitude);
-		return productManager.getProductsInRadius(name, geo, radius, mpg);
-	}
-	
-	  @RequestMapping(value = "/add/{name}", method = RequestMethod.PUT)
-	   Product addProduct(		   
-			@RequestParam("name") String name,
-			@RequestParam("pictureFileName") String pictureFileName, 
-			@RequestParam("brand") String brand,
-			@RequestParam("price") double price, 
-			@RequestParam("available") boolean available,
-			@RequestParam("dateStocked") String stocked_date, 
-			@RequestParam("storeId") String store_id,
-			@RequestParam("latitude") float latitude,
-			@RequestParam("longitude") float longitude) throws ProductDuplicateItemException{
-		     
 
-			Geolocation loc = new Geolocation();
-			loc.setLatitude(latitude);
-			loc.setLongitude(longitude);
-	        Product p = new Product(ObjectId.get(), store_id, price, name, brand, available, stocked_date, pictureFileName, loc);
-			productManager.addProduct(p);
-	        return p;
-	   }
+	@RequestMapping(value = "/listGeo", method = RequestMethod.GET)
+	public ResponseEntity<?> listGeo(@RequestBody final GeoRequestDTO dto) throws IOException {
+
+		return new ResponseEntity<>(
+				productManager.getProductsInRadius(dto.getName(), dto.getGeolocation(), dto.getRadius(), dto.getMpg()),
+				HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.PUT)
+	public ResponseEntity<?> addProduct(@RequestBody final ProductDTO dto) throws ProductDuplicateItemException {
+
+		Product product = converterFacade.convertProductTO(dto);
+		product.set_id(ObjectId.get());
+		productManager.addProduct(product);
+		return new ResponseEntity<>(product, HttpStatus.OK);
+	}
 }

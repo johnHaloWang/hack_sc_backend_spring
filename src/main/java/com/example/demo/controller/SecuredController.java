@@ -87,7 +87,7 @@ public class SecuredController {
     
 }
 	 */
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteUser(@RequestBody final IndexDTO dto){
 		String index = service.delete(dto.get_id());
 		return new ResponseEntity<>(index, HttpStatus.OK);
