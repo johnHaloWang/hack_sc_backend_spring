@@ -25,6 +25,8 @@ public class User extends BaseEntity implements UserDetails {
 	private String email;
 	private String creationTime = new Date(System.currentTimeMillis()).toString();
 	
+
+	
 	public void setStore_id(String store_id) {
 		this.store_id = store_id;
 	}

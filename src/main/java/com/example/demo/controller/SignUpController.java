@@ -1,17 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.converter.ConverterFacade;
-import com.example.demo.model.Authority;
-import com.example.demo.model.Geolocation;
 import com.example.demo.model.Store;
 import com.example.demo.model.User;
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.dto.RegisterDTO;
 import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.service.UserService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 @RestController
 @RequestMapping("/api/register")
 public class SignUpController {
 
+	Logger logger = LogManager.getLogger(AuthenticationController.class);
 	private final UserService service;
 	private final ConverterFacade converterFacade;
 
@@ -38,43 +36,46 @@ public class SignUpController {
 		this.converterFacade = converterFacade;
 	}
 	
-	//need to clean this up
+	/**
+	 * 
+	 * @param dto
+	 * @return
+	 * @throws StoreDuplicateItemException
+	 * json input example 
+{
+    "username": "halo4",
+    "password": "halo4",
+	"contactNumber":"6262678982",
+	"role": "ROLE_ADMIN",
+	"email": "halo@gamil.com",
+	"store":{
+    	"name": "new Xxxx-v4",
+	    "pictureFileName": "sdfa",
+	    "address": "asdfa",
+	    "zipcode": "afdsa",
+	    "city": "adfadfs",
+	    "state": "afdsasf",
+	    "geolocation":{
+		    "latitude": 23.229999542236328,
+		    "longitude": 32.22999954223633
+	    },
+	    "storeAddress": "asdfa adfadfs afdsa, afdsasf"
+	}
+    
+}
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> signUp(@RequestBody final RegisterDTO dto) throws StoreDuplicateItemException {
-		Geolocation geolocation = new Geolocation();
-		geolocation.setLatitude(dto.getLatitude());
-		geolocation.setLongitude(dto.getLongitude());
+
 		ObjectId store_id = ObjectId.get();
-		Store store = new Store(store_id, dto.getName(), dto.getPictureFileName(), geolocation, dto.getAddress(),
-				dto.getZipcode(), dto.getCity(), dto.getState());
-
+		Store store = converterFacade.convertStoreDTO(dto.getStore());
+		store.set_id(store_id);
 		storeManager.addStore(store);
-
-		User user = new User();
+		User user = converterFacade.convertRegisterDTO(dto);
 		user.set_id(ObjectId.get());
-		user.setUsername(dto.getUsername());
-		user.setPassword(dto.getPassword());
-		user.setStore_id(store.get_id());
-		user.setContactNumber(dto.getContactNumber());
-		user.setAccountNonExpired(false);
-		user.setCredentialsNonExpired(false);
-		user.setEnabled(true);
-		user.setRole(dto.getRole());
+		user.setStore_id(store_id.toHexString());
 
-		//this is just stupid....
-		List<Authority> authorities = new ArrayList<>();
-			if (user.getRole().equals("ROLE_USER"))
-				authorities.add(Authority.ROLE_USER);
-			else if (user.getRole().equals("ROLE_ADMIN"))
-				authorities.add(Authority.ROLE_ADMIN);
-			else if (user.getRole().equals("ANONYMOUS"))
-				authorities.add(Authority.ANONYMOUS);
-
-		user.setAuthorities(authorities);
-		user.setEmail(dto.getEmail());
-		User find = service.create(user);
-
-		return new ResponseEntity<>(find, HttpStatus.OK);
+		return new ResponseEntity<>(service.create(user), HttpStatus.OK);
 	}
 
 }

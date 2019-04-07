@@ -2,7 +2,7 @@ package com.example.demo.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-
+import com.example.demo.dto.StoreDTO;
 import org.bson.types.ObjectId;
 
 
@@ -19,18 +19,14 @@ public class RegisterDTO implements Serializable{
 	}
 	private String username;
 	private String password;
+	
 	private String store_id;
 	private String contactNumber;
 	private String role;
 	private String email;
 	private String name;
-	private String pictureFileName;
-	private String address; 
-	private String zipcode;
-	private String city; 
-	private String state; 
-	private float latitude; 
-	private float longitude;
+	private StoreDTO store;
+
 	private String creationTime = new Date(System.currentTimeMillis()).toString();
 	
 	public String getUsername() {
@@ -69,59 +65,17 @@ public class RegisterDTO implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public StoreDTO getStore() {
+		return store;
+	}
+	public void setStore(StoreDTO store) {
+		this.store = store;
+	}
 	public String getCreationTime() {
 		return creationTime;
 	}
 	public void setCreationTime(String creationTime) {
 		this.creationTime = creationTime;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getPictureFileName() {
-		return pictureFileName;
-	}
-	public void setPictureFileName(String pictureFileName) {
-		this.pictureFileName = pictureFileName;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getZipcode() {
-		return zipcode;
-	}
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
-	public String getState() {
-		return state;
-	}
-	public void setState(String state) {
-		this.state = state;
-	}
-	public float getLatitude() {
-		return latitude;
-	}
-	public void setLatitude(float latitude) {
-		this.latitude = latitude;
-	}
-	public float getLongitude() {
-		return longitude;
-	}
-	public void setLongitude(float longitude) {
-		this.longitude = longitude;
 	}
 
 	
