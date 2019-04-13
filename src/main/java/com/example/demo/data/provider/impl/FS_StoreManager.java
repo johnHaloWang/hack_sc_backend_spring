@@ -74,7 +74,7 @@ public class FS_StoreManager implements StoreManager {
 	}
 	
 	public List<Product> getAllProducts(ObjectId storeId) {
-		return storeInventoryRepository.findByStoreID(storeId.toString());
+		return storeInventoryRepository.findByStoreID(storeId.toHexString());
 	}
 
 	@Override
@@ -109,15 +109,14 @@ public class FS_StoreManager implements StoreManager {
 	private boolean doesStoreAlreadyExist(Store store) {
 		String storeAddress = store.getStoreAddress();
 		String storeZipCode = store.getZipcode();
-		String storeID = store.get_id();
 		Collection<Store> matchedStores = getStoreByName(store.getName());
 		
 		for (Store match : matchedStores) {
 			if (match.getStoreAddress().equals(storeAddress) && 
-					match.getZipcode().equals(storeZipCode)) {
-				if (storeID != null && match.get_id().equals(storeID))
+					match.getZipcode().equals(storeZipCode))
 					return true;
-			}
+			if(match.getGeolocation().equals(store.getGeolocation()))
+				return true;
 		}
 		return false;
 	}

@@ -40,5 +40,18 @@ public class Geolocation {
 	public void setLongitude(float longitude) {
 		this.longitude = longitude;
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if (!(o instanceof Geolocation))
+			return false;
+		Geolocation comparator = (Geolocation) o;
+		double latitudeDiff = Math.abs(this.latitude - comparator.latitude);
+		double longitudeDiff = Math.abs(this.longitude - comparator.longitude);
+		boolean latitudeCheck = latitudeDiff == 0 || latitudeDiff < Float.MIN_NORMAL;
+		boolean longitudeCheck = longitudeDiff == 0 || longitudeDiff < Float.MIN_NORMAL;	
+		return latitudeCheck && longitudeCheck;
+	}
 
 }

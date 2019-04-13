@@ -116,14 +116,12 @@ public class FS_ProductManager implements ProductManager{
 	 */
 	private boolean doesProductAlreadyExist(Product product) {
 		String storeID = product.getStore_id();
-		String productID = product.get_id();
-		Collection<Product> matchedProducts = getProductByName(product.getName());
+		String productName = product.getName();
+		Collection<Product> matchedProducts = getProductByName(productName);
 		
 		for (Product match : matchedProducts) {
-			if (match.getStore_id().equals(storeID)) {
-				if (productID != null && match.get_id().equals(productID))
+			if (match.getName().equals(productName) && match.getStore_id().equals(storeID))
 					return true;
-			}
 		}
 		return false;
 	}

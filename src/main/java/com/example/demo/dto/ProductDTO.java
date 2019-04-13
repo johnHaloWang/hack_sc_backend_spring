@@ -13,7 +13,7 @@ public class ProductDTO implements Serializable {
 	 	private  ObjectId _id;  
 		private String store_id;
 	    private double price;
-	    private double gasCost;
+//	    private double gasCost;
 	    private double totalPrice;
 	    private String name;
 	    private String brand;
@@ -41,12 +41,12 @@ public class ProductDTO implements Serializable {
 		public void setPrice(double price) {
 			this.price = price;
 		}
-		public double getGasCost() {
-			return gasCost;
-		}
-		public void setGasCost(double gasCost) {
-			this.gasCost = gasCost;
-		}
+//		public double getGasCost() {
+//			return gasCost;
+//		}
+//		public void setGasCost(double gasCost) {
+//			this.gasCost = gasCost;
+//		}
 		public double getTotalPrice() {
 			return totalPrice;
 		}

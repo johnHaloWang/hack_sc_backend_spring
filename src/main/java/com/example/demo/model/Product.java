@@ -204,7 +204,7 @@ public class Product {
 	}
 	
 	/**
-	 * Gets the gas cost
+	 * Gets the gas cost. DO NOT store in value in database.
 	 * @return
 	 */
 	public double getGasCost() { 
@@ -212,7 +212,7 @@ public class Product {
 	}
 	
 	/**
-	 * Sets the cost of the gas used to reach the item.
+	 * Sets the cost of the gas used to reach the item. DO NOT store in value in database.
 	 * @param gasCost
 	 */
 	public void setGasCost(double gasCost) {

@@ -20,7 +20,7 @@ public class ProductDTOConverter implements Converter<ProductDTO, Product> {
 		product.setAvailable(dto.isAvailable());
 		product.setBrand(dto.getBrand());
 		product.setCreationTime(dto.getCreationTime());
-		product.setGasCost(dto.getGasCost());
+//		product.setGasCost(dto.getGasCost());
 		product.setGeolocation(dto.getGeolocation());
 		product.setName(dto.getName());
 		product.setPictureFileName(dto.getPictureFileName());
