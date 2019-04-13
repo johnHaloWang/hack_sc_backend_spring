@@ -91,8 +91,8 @@ public class FS_ProductManager implements ProductManager{
 	 */
 	public void updateProduct(Product product) throws ProductDuplicateItemException{
 		product.setName(convertToTitleCase(product.getName()));
-		if (doesProductAlreadyExist(product))
-			throw new ProductDuplicateItemException("Product already exists at this store.");
+//		if (doesProductAlreadyExist(product, true))
+//			throw new ProductDuplicateItemException("Product already exists at this store.");
 		storeInventoryRepository.save(product);
 	}
 	
@@ -114,7 +114,7 @@ public class FS_ProductManager implements ProductManager{
 	public void addProduct(Product product) throws ProductDuplicateItemException {
 		product.setName(convertToTitleCase(product.getName()));
 		
-		if (doesProductAlreadyExist(product))
+		if (doesProductAlreadyExist(product, false))
 			throw new ProductDuplicateItemException("Product already exists at this store.");
 		
 		storeInventoryRepository.insert(product);
@@ -124,16 +124,22 @@ public class FS_ProductManager implements ProductManager{
 	 * Checks if the product already exists in the database as a different ID
 	 * under the same store ID.
 	 * @param product The product to add
+	 * @param isUpdating If you are updating an existing product
 	 * @return True if the product already exists; false otherwise.
 	 */
-	private boolean doesProductAlreadyExist(Product product) {
+	private boolean doesProductAlreadyExist(Product product, boolean isUpdating) {
 		String storeID = product.getStore_id();
 		String productName = product.getName();
 		Collection<Product> matchedProducts = getProductByName(productName);
 		
 		for (Product match : matchedProducts) {
 			if (match.getName().equals(productName) && match.getStore_id().equals(storeID))
+			{
+				if (isUpdating && match.get_id().equals(product.get_id()))
+						return false;
+				else
 					return true;
+			}
 		}
 		return false;
 	}

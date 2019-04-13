@@ -58,8 +58,8 @@ public class FS_StoreManager implements StoreManager {
 		store.setName(convertToTitleCase(store.getName()));
 		logger.info(store.getAddress());
 		
-		if (doesStoreAlreadyExist(store))
-			throw new StoreDuplicateItemException("This store address already exists, please enter another one.");
+//		if (doesStoreAlreadyExist(store, true))
+//			throw new StoreDuplicateItemException("This store address already exists, please enter another one.");
 		storeRepository.save(store);
 	}
 
@@ -96,7 +96,7 @@ public class FS_StoreManager implements StoreManager {
 		 */
 		store.setName(convertToTitleCase(store.getName()));
 		
-		if (doesStoreAlreadyExist(store))
+		if (doesStoreAlreadyExist(store, false))
 			throw new StoreDuplicateItemException("This store address already exists, please enter another one.");
 		storeRepository.insert(store);
 	}
@@ -104,19 +104,21 @@ public class FS_StoreManager implements StoreManager {
 	/**
 	 * Checks if the store already exists in the database as a different ID.
 	 * @param store The store to add
+	 * @param isUpdating If an existing store is being updated
 	 * @return True if the store already exists; false otherwise.
 	 */
-	private boolean doesStoreAlreadyExist(Store store) {
+	private boolean doesStoreAlreadyExist(Store store, boolean isUpdating) {
 		String storeAddress = store.getStoreAddress();
 		String storeZipCode = store.getZipcode();
 		Collection<Store> matchedStores = getStoreByName(store.getName());
 		
 		for (Store match : matchedStores) {
+			boolean matchesUpdatingStore = isUpdating && match.get_id().equals(store.get_id());
 			if (match.getStoreAddress().equals(storeAddress) && 
 					match.getZipcode().equals(storeZipCode))
-					return true;
+					return true && !matchesUpdatingStore;
 			if(match.getGeolocation().equals(store.getGeolocation()))
-				return true;
+				return true && !matchesUpdatingStore;
 		}
 		return false;
 	}
