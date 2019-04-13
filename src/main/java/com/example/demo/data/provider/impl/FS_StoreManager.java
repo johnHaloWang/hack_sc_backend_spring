@@ -101,7 +101,7 @@ public class FS_StoreManager implements StoreManager {
 		for (Store match : matchedStores) {
 			if (match.getStoreAddress().equals(storeAddress) && 
 					match.getZipcode().equals(storeZipCode)) {
-				if (match.get_id().equals(storeID))
+				if (storeID != null && match.get_id().equals(storeID))
 					return true;
 			}
 		}

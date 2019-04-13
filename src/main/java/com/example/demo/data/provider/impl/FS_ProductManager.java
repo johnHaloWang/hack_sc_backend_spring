@@ -121,7 +121,7 @@ public class FS_ProductManager implements ProductManager{
 		
 		for (Product match : matchedProducts) {
 			if (match.getStore_id().equals(storeID)) {
-				if (match.get_id().equals(productID))
+				if (productID != null && match.get_id().equals(productID))
 					return true;
 			}
 		}
