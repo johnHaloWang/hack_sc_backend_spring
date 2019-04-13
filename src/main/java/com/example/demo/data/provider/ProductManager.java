@@ -21,6 +21,7 @@ import org.bson.types.ObjectId;
 public interface ProductManager {
 	
 	public List<Product>getProductsInRadius(String productName, Geolocation geo, double miles, double mpg) throws IOException;
+	public List<Product>getAvailableProductsInRadius(String productName, Geolocation geo, double miles, double mpg) throws IOException;
 	public Collection<Product> getProductByName(String name);
 	public void updateProduct(Product product) throws ProductDuplicateItemException;
 	public void deleteProduct(ObjectId id);

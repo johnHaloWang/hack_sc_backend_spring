@@ -46,6 +46,18 @@ public class FS_ProductManager implements ProductManager{
 	}
 
 	@Override
+	public List<Product>getAvailableProductsInRadius(String productName, Geolocation geo, 
+			double miles, double mpg) throws IOException {
+		List<Product> allMatchingProducts = getProductsInRadius(productName, geo, miles, mpg);
+		for (Product product: allMatchingProducts)
+		{
+			if (!product.isAvailable())
+				allMatchingProducts.remove(product);
+		}
+		return allMatchingProducts;
+	}
+	
+	@Override
 	public Collection<Product> getProductByName(String name) {
 		return storeInventoryRepository.findByNameLike(name);
 	}
