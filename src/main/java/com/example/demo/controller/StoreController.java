@@ -73,7 +73,7 @@ public class StoreController {
 	 * Try it in your web browser: http://localhost:5000/john/store/store101
 	 */
 
-	@RequestMapping(value = "/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	public ResponseEntity<?> getStore(@RequestBody final IndexDTO dto) {
 		logger.info(dto.get_id().toHexString());
 		Store store = storeManager.getStore(dto.get_id());
