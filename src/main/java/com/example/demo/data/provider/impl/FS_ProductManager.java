@@ -102,7 +102,7 @@ public class FS_ProductManager implements ProductManager{
 	public void addProduct(Product product) throws ProductDuplicateItemException {
 		product.setName(convertToTitleCase(product.getName()));
 		
-		if (!doesProductAlreadyExist(product))
+		if (doesProductAlreadyExist(product))
 			throw new ProductDuplicateItemException("Product already exists at this store.");
 		
 		storeInventoryRepository.insert(product);
