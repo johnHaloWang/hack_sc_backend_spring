@@ -14,9 +14,12 @@ import org.bson.types.ObjectId;
 import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.model.Geolocation;
 import com.example.demo.model.Store;
+import com.example.demo.model.Product;
 import com.example.demo.controller.AuthenticationController;
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.data.repository.StoreRepository;
+import com.example.demo.data.repository.StoreInventoryRepository;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +39,8 @@ public class FS_StoreManager implements StoreManager {
 	Logger logger = LogManager.getLogger(AuthenticationController.class);
 	@Autowired
 	private StoreRepository storeRepository;
+	@Autowired
+	private StoreInventoryRepository storeInventoryRepository;
 	
 	@Override
 	public Store getStore(ObjectId storeId) {
@@ -61,6 +66,15 @@ public class FS_StoreManager implements StoreManager {
 	@Override
 	public void deleteStore(ObjectId storeId) {
 		storeRepository.delete(storeRepository.findBy_id(storeId));
+		List<Product> productsToDelete = getAllProducts(storeId);
+		for (Product product : productsToDelete) {
+			storeInventoryRepository.delete(storeInventoryRepository.findBy_id(product.getObjectID()));
+		}
+		
+	}
+	
+	public List<Product> getAllProducts(ObjectId storeId) {
+		return storeInventoryRepository.findByStoreID(storeId.toString());
 	}
 
 	@Override
@@ -93,18 +107,18 @@ public class FS_StoreManager implements StoreManager {
 	 * @return True if the store already exists; false otherwise.
 	 */
 	private boolean doesStoreAlreadyExist(Store store) {
-//		String storeAddress = store.getStoreAddress();
-//		String storeZipCode = store.getZipcode();
-//		String storeID = store.get_id();
-//		Collection<Store> matchedStores = getStoreByName(store.getName());
-//		
-//		for (Store match : matchedStores) {
-//			if (match.getStoreAddress().equals(storeAddress) && 
-//					match.getZipcode().equals(storeZipCode)) {
-//				if (storeID != null && match.get_id().equals(storeID))
-//					return true;
-//			}
-//		}
+		String storeAddress = store.getStoreAddress();
+		String storeZipCode = store.getZipcode();
+		String storeID = store.get_id();
+		Collection<Store> matchedStores = getStoreByName(store.getName());
+		
+		for (Store match : matchedStores) {
+			if (match.getStoreAddress().equals(storeAddress) && 
+					match.getZipcode().equals(storeZipCode)) {
+				if (storeID != null && match.get_id().equals(storeID))
+					return true;
+			}
+		}
 		return false;
 	}
 	

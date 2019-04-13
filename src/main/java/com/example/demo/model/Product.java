@@ -189,6 +189,14 @@ public class Product {
 	}
 	
 	/**
+	 * @return the _id
+	 */
+	public ObjectId getObjectID() {
+		return _id;
+	}
+	
+	
+	/**
 	 * @param _id the _id to set
 	 */
 	public void set_id(ObjectId _id) {

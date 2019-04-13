@@ -46,10 +46,8 @@ public class ProductController {
 		this.converterFacade = converterFacade;
 	}
 
-	@RequestMapping(value = "/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	public ResponseEntity<?> getProduct(@RequestBody final IndexDTO dto) {
-
-		productManager.deleteProduct(dto.get_id());
 		return new ResponseEntity<>(productManager.findProductById(dto.get_id()), HttpStatus.OK);
 	}
 
