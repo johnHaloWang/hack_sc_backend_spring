@@ -228,7 +228,7 @@ public class StoreController {
 	      "radius": 23.2, 
 	  	}
 	 */
-	@RequestMapping(value = "/listGeo", method = RequestMethod.GET)
+	@RequestMapping(value = "/listGeo", method = RequestMethod.POST)
 	public ResponseEntity<?> listGeo(@RequestBody final GeoRequestDTO dto) throws IOException {
 
 		return new ResponseEntity<>(storeManager.getStoreRadius(dto.getName(), dto.getGeolocation(), dto.getRadius()),
