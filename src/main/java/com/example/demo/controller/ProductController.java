@@ -73,11 +73,8 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/listGeo", method = RequestMethod.POST)
-	public ResponseEntity<?> listGeo(@RequestBody final GeoRequestDTO dto) throws IOException {
-
-		return new ResponseEntity<>(
-				productManager.getProductsInRadius(dto.getName(), dto.getGeolocation(), dto.getRadius(), dto.getMpg()),
-				HttpStatus.OK);
+	public List<Product> listGeo(@RequestBody final GeoRequestDTO dto) throws IOException {
+		return productManager.getProductsInRadius(dto.getName(), dto.getGeolocation(), dto.getRadius(), dto.getMpg());
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.PUT)
