@@ -17,9 +17,11 @@ import com.example.demo.model.Authority;
 import com.example.demo.model.Store;
 import com.example.demo.model.User;
 import com.example.demo.data.provider.StoreManager;
+import com.example.demo.dto.LoginDTO;
 import com.example.demo.dto.RegisterDTO;
 import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.service.UserService;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -40,10 +42,14 @@ public class SecuredController {
 		this.service = service;
 		this.converterFacade = converterFacade;
 	}
+	
+	
+	
+	@RequestMapping(value = "/getUsername", method = RequestMethod.POST)
+	public ResponseEntity<?> getUsername(@RequestBody final LoginDTO dto) {
 
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<?> sayHello() {
-		return new ResponseEntity<>("Secured hello!", HttpStatus.OK);
+		User user = service.findByUsername(dto.getUsername());
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
