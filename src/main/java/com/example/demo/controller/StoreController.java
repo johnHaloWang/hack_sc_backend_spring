@@ -15,16 +15,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.data.provider.StoreManager;
 import com.example.demo.dto.GeoRequestDTO;
 import com.example.demo.dto.IndexDTO;
 import com.example.demo.dto.StoreDTO;
-
 import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.model.Geolocation;
+import com.example.demo.model.Product;
 import com.example.demo.model.Store;
 
 import org.apache.logging.log4j.LogManager;
@@ -80,6 +79,19 @@ public class StoreController {
 		if (store == null)
 			return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(store, HttpStatus.OK);
+	}
+	
+	/**
+	 * This retrieves the products associated with the store
+	 * <p>
+	 * 
+	 * <p>
+	 * Try it in your web browser: http://localhost:5000/john/store/store101
+	 */
+
+	@RequestMapping(value = "/getProducts", method = RequestMethod.POST)
+	public List<Product> getProducts(@RequestBody final IndexDTO dto) {
+		return storeManager.getAllProducts(dto.get_id());
 	}
 
 	/**

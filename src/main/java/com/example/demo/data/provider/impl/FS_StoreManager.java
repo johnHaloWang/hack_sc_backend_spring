@@ -72,7 +72,7 @@ public class FS_StoreManager implements StoreManager {
 		}
 		
 	}
-	
+	@Override
 	public List<Product> getAllProducts(ObjectId storeId) {
 		return storeInventoryRepository.findByStoreID(storeId.toHexString());
 	}

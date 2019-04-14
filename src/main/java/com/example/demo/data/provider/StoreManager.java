@@ -10,10 +10,11 @@ import java.util.List;
 
 import com.example.demo.exceptions.StoreDuplicateItemException;
 import com.example.demo.model.Geolocation;
+import com.example.demo.model.Product;
 import com.example.demo.model.Store;
 
 /**
- * @author johnhalowang
+ * @author johnhalowang, Lisa Chen
  *
  */
 public interface StoreManager {
@@ -29,6 +30,12 @@ public interface StoreManager {
 	 * @return the Store object
 	 */
 	public Store getStore(ObjectId StoreId);
+	
+	/**
+	 * Gets all the products associated with the store.
+	 * @return The list of products
+	 */
+	public List<Product> getAllProducts(ObjectId StoreId);
 
 	/**
 	 * Update the given user object and persist it.
