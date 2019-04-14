@@ -70,10 +70,10 @@ public class Store {
 		this.state = state;
 	}
 
-	public String getStoreAddress() {
-    	String buildAddress =  address + ' ' + city + ' ' + zipcode + ", "+ state; 
-    	return buildAddress;
-    }
+//	public String getStoreAddress() {
+//    	String buildAddress =  address + ' ' + city + ' ' + zipcode + ", "+ state; 
+//    	return buildAddress;
+//    }
     
     
     /**

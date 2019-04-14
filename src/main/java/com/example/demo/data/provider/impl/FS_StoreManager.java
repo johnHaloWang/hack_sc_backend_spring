@@ -108,13 +108,13 @@ public class FS_StoreManager implements StoreManager {
 	 * @return True if the store already exists; false otherwise.
 	 */
 	private boolean doesStoreAlreadyExist(Store store, boolean isUpdating) {
-		String storeAddress = store.getStoreAddress();
+		String storeAddress = store.getAddress();
 		String storeZipCode = store.getZipcode();
 		Collection<Store> matchedStores = getStoreByName(store.getName());
 		
 		for (Store match : matchedStores) {
 			boolean matchesUpdatingStore = isUpdating && match.get_id().equals(store.get_id());
-			if (match.getStoreAddress().equals(storeAddress) && 
+			if (match.getAddress().equals(storeAddress) && 
 					match.getZipcode().equals(storeZipCode))
 					return true && !matchesUpdatingStore;
 			if(match.getGeolocation().equals(store.getGeolocation()))
