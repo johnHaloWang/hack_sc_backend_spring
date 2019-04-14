@@ -72,7 +72,7 @@ public class ProductController {
 		return productManager.listAllProducts();
 	}
 
-	@RequestMapping(value = "/listGeo", method = RequestMethod.GET)
+	@RequestMapping(value = "/listGeo", method = RequestMethod.POST)
 	public ResponseEntity<?> listGeo(@RequestBody final GeoRequestDTO dto) throws IOException {
 
 		return new ResponseEntity<>(
