@@ -17,9 +17,5 @@ import com.example.demo.model.Product;
 public interface StoreInventoryRepository extends MongoRepository<Product, String> {
 
 	Product findBy_id(ObjectId _id);
-	@Query("{ 'store_id' : ?0 }")
-	List<Product> findByStoreID(String store_id);
 	Collection<Product> findByNameLike(String name);
-
-
 }

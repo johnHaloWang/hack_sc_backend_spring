@@ -91,6 +91,8 @@ public class StoreController {
 
 	@RequestMapping(value = "/getProducts", method = RequestMethod.POST)
 	public List<Product> getProducts(@RequestBody final IndexDTO dto) {
+		logger.info("testing" + dto.get_id());
+		logger.info(".......");
 		return storeManager.getAllProducts(dto.get_id());
 	}
 

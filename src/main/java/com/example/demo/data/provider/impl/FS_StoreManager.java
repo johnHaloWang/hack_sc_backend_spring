@@ -74,7 +74,15 @@ public class FS_StoreManager implements StoreManager {
 	}
 	@Override
 	public List<Product> getAllProducts(ObjectId storeId) {
-		return storeInventoryRepository.findByStoreID(storeId.toHexString());
+		List<Product> allProducts = storeInventoryRepository.findAll();
+		String compareID = storeId.toHexString();
+		List<Product> result = new  ArrayList<>();
+		for (Product product: allProducts)
+		{
+			if (product.getStore_id().equals(compareID))
+				result.add(product);
+		}
+		return result;
 	}
 
 	@Override
