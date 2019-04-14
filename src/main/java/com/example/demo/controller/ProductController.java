@@ -2,22 +2,20 @@ package com.example.demo.controller;
 
 import java.io.IOException;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.converter.ConverterFacade;
 import com.example.demo.data.provider.ProductManager;
 import com.example.demo.exceptions.ProductDuplicateItemException;
-
+import com.example.demo.model.AverageGasPriceCalculator;
 import com.example.demo.model.Product;
-
 import com.example.demo.dto.IndexDTO;
 import com.example.demo.dto.ProductDTO;
 import com.example.demo.dto.GeoRequestDTO;
@@ -46,6 +44,7 @@ public class ProductController {
 		this.converterFacade = converterFacade;
 	}
 
+	
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	public ResponseEntity<?> getProduct(@RequestBody final IndexDTO dto) {
 		return new ResponseEntity<>(productManager.findProductById(dto.get_id()), HttpStatus.OK);
@@ -75,6 +74,12 @@ public class ProductController {
 	@RequestMapping(value = "/listGeo", method = RequestMethod.POST)
 	public List<Product> listGeo(@RequestBody final GeoRequestDTO dto) throws IOException {
 		return productManager.getProductsInRadius(dto.getName(), dto.getGeolocation(), dto.getRadius(), dto.getMpg());
+	}
+	
+	@RequestMapping(value = "/getGasPrice", method = RequestMethod.POST)
+	public double getGasPrice(@RequestBody final GeoRequestDTO dto) throws IOException {
+		AverageGasPriceCalculator gasCalc = new AverageGasPriceCalculator(dto.getGeolocation());
+		return gasCalc.getAveragePrice();
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.PUT)
